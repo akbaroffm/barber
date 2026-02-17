@@ -4,22 +4,22 @@
 
     <div class="px-4 pt-2">
       <!-- Period Filter Tabs -->
-      <div class="flex gap-2 mb-4 overflow-x-auto">
+      <div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
         <button
-          v-for="period in periods"
-          :key="period.value"
-          @click="activePeriod = period.value"
+          v-for="p in periods"
+          :key="p.value"
+          @click="activePeriod = p.value"
           class="px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all"
           :style="{
             background:
-              activePeriod === period.value
+              activePeriod === p.value
                 ? 'var(--accent)'
                 : 'var(--bg-card)',
             color:
-              activePeriod === period.value ? '#000' : 'var(--text-secondary)',
+              activePeriod === p.value ? '#000' : 'var(--text-secondary)',
           }"
         >
-          {{ period.label }}
+          {{ p.label }}
         </button>
       </div>
 

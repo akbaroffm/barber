@@ -132,7 +132,7 @@
 
       <!-- Tabs -->
       <div
-        class="flex gap-0 mb-4 overflow-x-auto"
+        class="flex gap-0 mb-4 overflow-x-auto no-scrollbar"
         style="border-bottom: 0.5px solid var(--separator)"
       >
         <button
@@ -176,8 +176,14 @@
             @click="activeServiceCategory = cat"
             class="px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all"
             :style="{
-              background: activeServiceCategory === cat ? 'var(--accent)' : 'var(--bg-card)',
-              color: activeServiceCategory === cat ? '#000' : 'var(--text-secondary)'
+              background:
+                activeServiceCategory === cat
+                  ? 'var(--accent)'
+                  : 'var(--bg-card)',
+              color:
+                activeServiceCategory === cat
+                  ? '#000'
+                  : 'var(--text-secondary)',
             }"
           >
             {{ cat }}
@@ -199,7 +205,14 @@
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-0.5">
               <span class="text-[15px] font-semibold">{{ service.name }}</span>
-              <span class="text-[9px] font-bold px-2 py-0.5 rounded-md" :style="{ background: 'var(--accent-dim)', color: 'var(--accent)' }">{{ service.category || 'Erkaklar' }}</span>
+              <span
+                class="text-[9px] font-bold px-2 py-0.5 rounded-md"
+                :style="{
+                  background: 'var(--accent-dim)',
+                  color: 'var(--accent)',
+                }"
+                >{{ service.category || "Erkaklar" }}</span
+              >
             </div>
             <span
               class="text-[12px] block mb-1.5 line-clamp-2"
@@ -355,13 +368,15 @@ const barber = computed(() =>
 );
 const activeTab = ref("about");
 const currentImg = ref(1);
-const activeServiceCategory = ref('Hammasi');
-const serviceCategories = ref(['Hammasi', 'Erkaklar', 'Ayollar', 'Bolalar']);
+const activeServiceCategory = ref("Hammasi");
+const serviceCategories = ref(["Hammasi", "Erkaklar", "Ayollar", "Bolalar"]);
 
 const filteredServices = computed(() => {
   if (!barber.value) return [];
-  if (activeServiceCategory.value === 'Hammasi') return barber.value.services;
-  return barber.value.services.filter(s => (s.category || 'Erkaklar') === activeServiceCategory.value);
+  if (activeServiceCategory.value === "Hammasi") return barber.value.services;
+  return barber.value.services.filter(
+    (s) => (s.category || "Erkaklar") === activeServiceCategory.value,
+  );
 });
 
 const mockSchedule = {

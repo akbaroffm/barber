@@ -5,7 +5,7 @@
       <!-- Category Tabs -->
       <div
         v-if="barberStore.myServices.length > 0"
-        class="flex gap-2 mb-4 overflow-x-auto"
+        class="flex gap-2 mb-4 overflow-x-auto no-scrollbar"
       >
         <button
           v-for="cat in categories"

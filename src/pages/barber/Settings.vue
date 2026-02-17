@@ -236,6 +236,16 @@
             >{{ tempAddress || "Hali tanlanmagan" }}</span
           >
         </div>
+        <div class="flex gap-3">
+          <button
+            @click="getCurrentLocation"
+            class="flex-1 py-3 rounded-xl text-[13px] font-bold border border-[var(--separator)] flex items-center justify-center gap-2 active:bg-white/5"
+            style="color: var(--text-primary)"
+          >
+            <MapPin :size="16" />
+            Mening joylashuvim
+          </button>
+        </div>
         <button
           @click="confirmMapSelection"
           class="w-full py-4 rounded-2xl text-[15px] font-bold"
@@ -308,6 +318,35 @@ const handleLocationUpdate = async ({ lat, lng }) => {
   // Use reverse geocoding
   const address = await getAddressFromCoordinates(lat, lng);
   tempAddress.value = address;
+};
+
+const getCurrentLocation = () => {
+  if (!navigator.geolocation) {
+    telegram.showAlert?.("Geolokatsiya qo'llab-quvvatlanmaydi");
+    return;
+  }
+  
+  tempAddress.value = "Joylashuv aniqlanmoqda...";
+  telegram.HapticFeedback?.impactOccurred("medium");
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+      const lat = latitude;
+      const lng = longitude;
+      
+      tempLocation.value = { lat, lng };
+      const address = await getAddressFromCoordinates(lat, lng);
+      tempAddress.value = address;
+      telegram.HapticFeedback?.notificationOccurred("success");
+    },
+    (err) => {
+      console.error(err);
+      telegram.showAlert?.("Joylashuvni aniqlab bo'lmadi. GPS yoqilganligini tekshiring.");
+      tempAddress.value = editForm.address; // Revert
+    },
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+  );
 };
 
 const confirmMapSelection = () => {

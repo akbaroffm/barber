@@ -49,7 +49,6 @@ const authStore = useAuthStore();
 const selectRole = (role) => {
   authStore.setRole(role);
   telegram.HapticFeedback?.impactOccurred('medium');
-  // Use router.replace to avoid server 404s and ensure SPA navigation
-  router.replace(role === 'mijoz' ? '/c/home' : '/b/dashboard');
+  router.push('/login');
 };
 </script>

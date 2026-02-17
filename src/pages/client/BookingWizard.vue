@@ -91,7 +91,7 @@
 
       <!-- Select Schedule -->
       <h3 class="text-[15px] font-bold mb-3">Sanani tanlang</h3>
-      <div class="flex gap-2 overflow-x-auto pb-1 mb-5">
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-5">
         <button
           v-for="date in availableDates"
           :key="date.iso"

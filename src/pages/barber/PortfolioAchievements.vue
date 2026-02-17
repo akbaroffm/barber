@@ -3,11 +3,11 @@
     <TopBar title="Portfolio va yutuqlar" showBack />
     <div class="px-4 pt-2">
       <!-- Tabs for Portfolio vs Certificates -->
-      <div class="flex p-1 rounded-2xl bg-[#1e1810] mb-6" style="border: 1px solid #ffffff05;">
+      <div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
          <button 
-           @click="activeTab = 'works'" 
+           @click="activeTab = 'portfolio'" 
            class="flex-1 py-2.5 rounded-xl text-[13px] font-bold transition-all"
-           :style="{ background: activeTab === 'works' ? 'var(--accent)' : 'transparent', color: activeTab === 'works' ? '#000' : 'var(--text-secondary)' }"
+           :style="{ background: activeTab === 'portfolio' ? 'var(--accent)' : 'transparent', color: activeTab === 'portfolio' ? '#000' : 'var(--text-secondary)' }"
          >
            Ish namunalari
          </button>

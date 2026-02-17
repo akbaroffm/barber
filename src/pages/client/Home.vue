@@ -290,6 +290,16 @@
             >{{ tempAddress || "Hali tanlanmagan" }}</span
           >
         </div>
+        <div class="flex gap-3">
+          <button
+            @click="getCurrentLocation"
+            class="flex-1 py-3 rounded-xl text-[13px] font-bold border border-[var(--separator)] flex items-center justify-center gap-2 active:bg-white/5"
+            style="color: var(--text-primary)"
+          >
+            <MapPin :size="16" />
+            Mening joylashuvim
+          </button>
+        </div>
         <button
           @click="confirmLocation"
           class="w-full py-4 rounded-2xl text-[15px] font-bold"
@@ -428,6 +438,35 @@ const openLocationPicker = () => {
   isLocationPickerOpen.value = true;
 };
 
+const getCurrentLocation = () => {
+  if (!navigator.geolocation) {
+    telegram.showAlert?.("Geolokatsiya qo'llab-quvvatlanmaydi");
+    return;
+  }
+  
+  tempAddress.value = "Joylashuv aniqlanmoqda...";
+  telegram.HapticFeedback?.impactOccurred("medium");
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+      const lat = latitude;
+      const lng = longitude;
+      
+      tempLocation.value = { lat, lng };
+      const address = await getAddressFromCoordinates(lat, lng);
+      tempAddress.value = address;
+      telegram.HapticFeedback?.notificationOccurred("success");
+    },
+    (err) => {
+      console.error(err);
+      telegram.showAlert?.("Joylashuvni aniqlab bo'lmadi. GPS yoqilganligini tekshiring.");
+      tempAddress.value = clientAddress.value; // Revert
+    },
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+  );
+};
+
 const handleLocationUpdate = async ({ lat, lng }) => {
   tempLocation.value = { lat, lng };
   tempAddress.value = "Manzil aniqlanmoqda...";
@@ -491,12 +530,15 @@ const barbersWithDistance = computed(() => {
     const bLng = b.location?.lng || 69.2401 + (Math.random() - 0.5) * 0.1;
     
     // Calculate distance from client
-    const dist = calculateDistance(
-      clientLocation.value.lat, 
-      clientLocation.value.lng,
-      bLat,
-      bLng
-    );
+    let dist = "0";
+    if (clientLocation.value) {
+      dist = calculateDistance(
+        clientLocation.value.lat, 
+        clientLocation.value.lng,
+        bLat,
+        bLng
+      );
+    }
     
     return {
       ...b,
