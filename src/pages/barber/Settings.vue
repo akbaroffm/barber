@@ -203,7 +203,7 @@
       </div>
     </BottomSheet>
 
-    <!-- Simulated Map Picker BottomSheet -->
+    <!-- Map Picker BottomSheet -->
     <BottomSheet
       :isOpen="isMapOpen"
       title="Manzilni tanlang"
@@ -211,20 +211,17 @@
     >
       <div class="flex flex-col gap-4 pb-8">
         <div
-          class="aspect-video w-full rounded-2xl overflow-hidden relative"
+          class="aspect-square w-full rounded-2xl overflow-hidden relative"
           style="background: #2a2117"
         >
-          <!-- Mock Map Visualization -->
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="relative">
-              <MapPin :size="40" class="text-red-500 animate-bounce" />
-              <div
-                class="w-2 h-2 rounded-full bg-black/40 blur-[2px] mx-auto -mt-1"
-              />
-            </div>
-          </div>
+          <BaseMap
+            mode="select"
+            :initial-location="editForm.location ? [editForm.location.lat, editForm.location.lng] : null"
+            @update:location="handleLocationUpdate"
+          />
+          
           <div
-            class="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/60 backdrop-blur-md"
+            class="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/60 backdrop-blur-md z-[500]"
           >
             <span class="text-[12px] font-medium text-white"
               >Xaritani suring va markaziy nuqtani tanlang</span
@@ -236,13 +233,14 @@
             >Tanlangan manzil:</span
           >
           <span class="text-[14px] font-bold"
-            >Toshkent, Shayxontohur,
-            {{ Math.floor(Math.random() * 50) + 1 }}-uy</span
+            >{{ tempAddress || "Hali tanlanmagan" }}</span
           >
         </div>
         <button
           @click="confirmMapSelection"
           class="w-full py-4 rounded-2xl text-[15px] font-bold"
+          :class="!tempLocation ? 'opacity-50' : ''"
+          :disabled="!tempLocation"
           style="background: var(--accent); color: #000"
         >
           Shu yerni tanlash
@@ -259,6 +257,7 @@ import { useBarberStore } from "@/stores/barber";
 import { useRouter } from "vue-router";
 import TopBar from "@/components/shared/TopBar.vue";
 import BottomSheet from "@/components/ui/BottomSheet.vue";
+import BaseMap from "@/components/common/BaseMap.vue";
 import {
   ChevronRight,
   Clock,
@@ -276,6 +275,9 @@ const router = useRouter();
 
 const isEditOpen = ref(false);
 const isMapOpen = ref(false);
+const tempLocation = ref(null);
+const tempAddress = ref("");
+
 const editForm = reactive({
   name: barberStore.currentUser?.name || "",
   phone: barberStore.currentUser?.phone || "",
@@ -293,17 +295,22 @@ const openEdit = () => {
 
 const openMapPicker = () => {
   telegram.HapticFeedback?.impactOccurred("light");
+  tempLocation.value = editForm.location;
+  tempAddress.value = editForm.address;
   isMapOpen.value = true;
 };
 
+const handleLocationUpdate = ({ lat, lng }) => {
+  tempLocation.value = { lat, lng };
+  // In a real app, use reverse geocoding API here
+  tempAddress.value = `Toshkent, ${lat.toFixed(4)}, ${lng.toFixed(4)}`; 
+};
+
 const confirmMapSelection = () => {
-  // Simulate finding address from coordinates
-  const newAddr = `Toshkent, Rayon ${Math.floor(Math.random() * 10) + 1}`;
-  editForm.address = newAddr;
-  editForm.location = {
-    lat: 41.3111 + (Math.random() - 0.5) * 0.01,
-    lng: 69.2406 + (Math.random() - 0.5) * 0.01,
-  };
+  if (!tempLocation.value) return;
+  
+  editForm.location = tempLocation.value;
+  editForm.address = tempAddress.value;
 
   telegram.HapticFeedback?.notificationOccurred("success");
   isMapOpen.value = false;

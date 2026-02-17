@@ -14,11 +14,11 @@
             >Sizning manzilingiz</span
           >
           <button
-            @click="refreshLocation"
+            @click="openLocationPicker"
             class="text-[14px] font-bold flex items-center gap-1.5 transition-active active:opacity-50"
           >
             <MapPin :size="13" style="color: var(--accent)" />
-            <span>Toshkent, O'zbekiston</span>
+            <span class="truncate max-w-[200px]">{{ clientAddress }}</span>
             <RefreshCcw :size="10" class="opacity-40" />
           </button>
         </div>
@@ -303,14 +303,109 @@
         </p>
       </div>
     </div>
+
+    <!-- Location Picker BottomSheet -->
+    <BottomSheet
+      :isOpen="isLocationPickerOpen"
+      title="Manzilni tanlang"
+      @close="isLocationPickerOpen = false"
+    >
+      <div class="flex flex-col gap-4 pb-8">
+        <div
+          class="aspect-square w-full rounded-2xl overflow-hidden relative"
+          style="background: #2a2117"
+        >
+          <BaseMap
+            mode="select"
+            :initial-location="clientLocation ? [clientLocation.lat, clientLocation.lng] : null"
+            @update:location="handleLocationUpdate"
+          />
+          
+          <div
+            class="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/60 backdrop-blur-md z-[500]"
+          >
+            <span class="text-[12px] font-medium text-white"
+              >Xaritadan joylashuvingizni belgilang</span
+            >
+          </div>
+        </div>
+        <div class="p-4 rounded-xl" style="background: var(--bg-input)">
+          <span class="text-[13px] font-medium block mb-1 opacity-50"
+            >Tanlangan manzil:</span
+          >
+          <span class="text-[14px] font-bold"
+            >{{ tempAddress || "Hali tanlanmagan" }}</span
+          >
+        </div>
+        <button
+          @click="confirmLocation"
+          class="w-full py-4 rounded-2xl text-[15px] font-bold"
+          :class="!tempLocation ? 'opacity-50' : ''"
+          :disabled="!tempLocation"
+          style="background: var(--accent); color: #000"
+        >
+          Tasdiqlash
+        </button>
+      </div>
+    </BottomSheet>
+
+    <!-- Map View Overlay -->
+    <div
+      v-if="isMapOpen"
+      class="fixed inset-0 z-[100] flex flex-col"
+      style="background: var(--bg-primary)"
+    >
+      <div
+        class="px-4 py-3 flex items-center justify-between border-b border-white/5 bg-black/50 backdrop-blur-md absolute top-0 left-0 right-0 z-[101]"
+      >
+        <h2 class="text-[16px] font-bold">Xaritadan qidirish</h2>
+        <button
+          @click="isMapOpen = false"
+          class="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 active:bg-white/20"
+        >
+          <X :size="18" />
+        </button>
+      </div>
+
+      <div class="flex-1 relative mt-[58px]">
+        <BaseMap
+          mode="view"
+          :markers="mapMarkers"
+          @marker-click="handleMarkerClick"
+        />
+      </div>
+
+      <!-- Selected Barber Preview (if any) -->
+      <!-- We could add a small preview card here when a marker is clicked, but simple navigation is easier for now -->
+    </div>
+
+    <!-- Map Float Button -->
+    <button
+      v-if="!isMapOpen"
+      @click="openMap"
+      class="fixed bottom-18 right-5 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center z-50 transition-transform active:scale-95"
+      style="
+        background: var(--accent);
+        color: #000;
+        box-shadow: 0 4px 20px rgba(200, 149, 46, 0.4);
+      "
+    >
+      <Map :size="24" />
+    </button>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useBarberStore } from "@/stores/barber";
 import { useNotificationStore } from "@/stores/notification";
 import { useFavoritesStore } from "@/stores/favorites";
+import { useRouter } from "vue-router";
+import BaseMap from "@/components/common/BaseMap.vue";
+import BottomSheet from "@/components/ui/BottomSheet.vue"; // Imported BottomSheet
+import { calculateDistance } from "@/utils/location"; // Imported distance utility
+import storage from "@/utils/storage";
+
 import {
   Search,
   Star,
@@ -320,18 +415,51 @@ import {
   Clock,
   Wallet,
   RefreshCcw,
+  Map,
+  X
 } from "lucide-vue-next";
 import telegram from "@/services/telegram";
 
 const barberStore = useBarberStore();
 const notifStore = useNotificationStore();
 const favoritesStore = useFavoritesStore();
+const router = useRouter();
+
 const search = ref("");
 const activeFilter = ref("all");
+const isMapOpen = ref(false);
 
-const refreshLocation = () => {
-  telegram.HapticFeedback?.impactOccurred("medium");
-  telegram.showAlert?.("Joylashuvingiz yangilandi (simulyatsiya)");
+// Location State
+const isLocationPickerOpen = ref(false);
+const clientLocation = ref(storage.get('client_location') || { lat: 41.2995, lng: 69.2401 }); // Default Tashkent
+const clientAddress = ref(storage.get('client_address') || "Toshkent, O'zbekiston");
+const tempLocation = ref(null);
+const tempAddress = ref("");
+
+const openLocationPicker = () => {
+  telegram.HapticFeedback?.impactOccurred("light");
+  tempLocation.value = clientLocation.value;
+  tempAddress.value = clientAddress.value;
+  isLocationPickerOpen.value = true;
+};
+
+const handleLocationUpdate = ({ lat, lng }) => {
+  tempLocation.value = { lat, lng };
+  // Simulating reverse geocoding
+  tempAddress.value = `Toshkent, ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+};
+
+const confirmLocation = () => {
+  if (!tempLocation.value) return;
+  
+  clientLocation.value = tempLocation.value;
+  clientAddress.value = tempAddress.value;
+  
+  storage.set('client_location', clientLocation.value);
+  storage.set('client_address', clientAddress.value);
+
+  telegram.HapticFeedback?.notificationOccurred("success");
+  isLocationPickerOpen.value = false;
 };
 
 const toggleFavorite = (barberId) => {
@@ -339,12 +467,46 @@ const toggleFavorite = (barberId) => {
   telegram.HapticFeedback?.impactOccurred("light");
 };
 
+const openMap = () => {
+  isMapOpen.value = true;
+  telegram.HapticFeedback?.impactOccurred("light");
+};
+
+const handleMarkerClick = (marker) => {
+  router.push(`/c/barber/${marker.id}`);
+};
+
 const unread = computed(
   () => notifStore.notifications.filter((n) => !n.read).length,
 );
+
+// Barbers with calculated distance
+const barbersWithDistance = computed(() => {
+  return barberStore.barbers.map(b => {
+    // Determine barber location (mock if missing)
+    const bLat = b.location?.lat || 41.2995 + (Math.random() - 0.5) * 0.1;
+    const bLng = b.location?.lng || 69.2401 + (Math.random() - 0.5) * 0.1;
+    
+    // Calculate distance from client
+    const dist = calculateDistance(
+      clientLocation.value.lat, 
+      clientLocation.value.lng,
+      bLat,
+      bLng
+    );
+    
+    return {
+      ...b,
+      _lat: bLat, // Store for map markers
+      _lng: bLng,
+      distance: `${dist} km` // Override string distance with calculated
+    };
+  });
+});
+
 const popularBarber = computed(
   () =>
-    [...barberStore.barbers].sort(
+    [...barbersWithDistance.value].sort(
       (a, b) => (b.reviewCount || 0) - (a.reviewCount || 0),
     )[0],
 );
@@ -354,7 +516,7 @@ const setFilter = (f) => {
 };
 
 const displayBarbers = computed(() => {
-  let list = [...barberStore.barbers];
+  let list = [...barbersWithDistance.value];
   if (search.value) {
     const q = search.value.toLowerCase();
     list = list.filter((b) => b.name.toLowerCase().includes(q));
@@ -368,4 +530,14 @@ const displayBarbers = computed(() => {
     list = list.filter((b) => b.id !== popularBarber.value.id);
   return list;
 });
+
+const mapMarkers = computed(() => {
+  return barbersWithDistance.value.map(b => ({
+    id: b.id,
+    lat: b._lat,
+    lng: b._lng,
+    title: b.name
+  }));
+});
 </script>
+```

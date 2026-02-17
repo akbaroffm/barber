@@ -55,10 +55,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
     
-    if (to.path === '/' && authStore.isAuthenticated) {
-        if (authStore.role === 'mijoz') return next('/c/home');
-        if (authStore.role === 'sartarosh') return next('/b/dashboard');
-    }
+    // Auto-redirect removed to allow viewing Landing Page
+    // if (to.path === '/' && authStore.isAuthenticated) {
+    //     if (authStore.role === 'mijoz') return next('/c/home');
+    //     if (authStore.role === 'sartarosh') return next('/b/dashboard');
+    // }
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         return next('/role');

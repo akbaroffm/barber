@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './app/router';
 import './style.css';
+import 'leaflet/dist/leaflet.css';
 import telegram from './services/telegram';
 
 const app = createApp(App);
