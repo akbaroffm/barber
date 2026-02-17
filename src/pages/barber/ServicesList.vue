@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-24">
+  <div class="pb-28">
     <TopBar title="Xizmatlar" showBack />
     <div class="px-4 pt-2">
       <!-- Category Tabs -->
