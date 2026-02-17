@@ -94,13 +94,15 @@
         </div>
       </div>
 
-      <button
-        @click="openAdd"
-        class="w-full py-4 rounded-[20px] text-[15px] font-bold shadow-lg flex items-center justify-center gap-2"
-        style="background: var(--accent); color: #000"
-      >
-        <Plus :size="18" /> Yangi xizmat qo'shish
-      </button>
+      <div class="fixed bottom-16 left-4 right-4 z-40">
+        <button
+          @click="openAdd"
+          class="w-full py-4 rounded-[20px] text-[15px] font-bold shadow-lg flex items-center justify-center gap-2"
+          style="background: var(--accent); color: #000"
+        >
+          <Plus :size="18" /> Yangi xizmat qo'shish
+        </button>
+      </div>
     </div>
 
     <!-- Redesigned Service Form (Slide-up menu) -->
@@ -153,7 +155,11 @@
                     v-model="form.name"
                     placeholder="Masalan: Soch va soqol olish"
                     class="py-4 bg-card-elevated w-full"
-                    style="background: var(--bg-card); border-radius: 18px; padding-left: 48px;"
+                    style="
+                      background: var(--bg-card);
+                      border-radius: 18px;
+                      padding-left: 48px;
+                    "
                   />
                 </div>
               </div>
@@ -176,7 +182,11 @@
                       type="number"
                       placeholder="50 000"
                       class="py-4 w-full"
-                      style="background: var(--bg-card); border-radius: 18px; padding-left: 48px;"
+                      style="
+                        background: var(--bg-card);
+                        border-radius: 18px;
+                        padding-left: 48px;
+                      "
                     />
                   </div>
                 </div>
@@ -197,7 +207,11 @@
                       type="number"
                       placeholder="45"
                       class="py-4 w-full"
-                      style="background: var(--bg-card); border-radius: 18px; padding-left: 48px;"
+                      style="
+                        background: var(--bg-card);
+                        border-radius: 18px;
+                        padding-left: 48px;
+                      "
                     />
                   </div>
                 </div>
