@@ -70,80 +70,41 @@
       </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="flex justify-center gap-6 px-4 pb-5">
-      <button
-        @click="setFilter('near')"
-        class="flex flex-col items-center gap-1.5"
-      >
-        <div
-          class="w-12 h-12 rounded-2xl flex items-center justify-center"
-          :style="{
-            background:
-              activeFilter === 'near' ? 'var(--accent)' : 'var(--bg-card)',
-          }"
+    <!-- Quick Actions (Filters) -->
+    <div class="px-4 pb-4">
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+        <button
+          @click="setFilter('all')"
+          class="px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap transition-all"
+          :class="activeFilter === 'all' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--bg-card)] text-[var(--text-secondary)]'"
         >
-          <MapPin
-            :size="20"
-            :style="{
-              color: activeFilter === 'near' ? '#000' : 'var(--accent)',
-            }"
-          />
-        </div>
-        <span
-          class="text-[11px] font-medium"
-          style="color: var(--text-secondary)"
-          >Yaqinlar</span
+          Barchasi
+        </button>
+        <button
+          @click="setFilter('near')"
+          class="px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap flex items-center gap-1.5 transition-all"
+          :class="activeFilter === 'near' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--bg-card)] text-[var(--text-secondary)]'"
         >
-      </button>
-      <button
-        @click="setFilter('rating')"
-        class="flex flex-col items-center gap-1.5"
-      >
-        <div
-          class="w-12 h-12 rounded-2xl flex items-center justify-center"
-          :style="{
-            background:
-              activeFilter === 'rating' ? 'var(--accent)' : 'var(--bg-card)',
-          }"
+          <MapPin :size="14" />
+          Yaqinlar
+        </button>
+        <button
+          @click="setFilter('rating')"
+          class="px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap flex items-center gap-1.5 transition-all"
+          :class="activeFilter === 'rating' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--bg-card)] text-[var(--text-secondary)]'"
         >
-          <Star
-            :size="20"
-            :style="{
-              color: activeFilter === 'rating' ? '#000' : 'var(--accent)',
-            }"
-          />
-        </div>
-        <span
-          class="text-[11px] font-medium"
-          style="color: var(--text-secondary)"
-          >Eng yaxshi</span
+          <Star :size="14" />
+          Mashhurlar
+        </button>
+        <button
+          @click="setFilter('cheap')"
+          class="px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap flex items-center gap-1.5 transition-all"
+          :class="activeFilter === 'cheap' ? 'bg-[var(--accent)] text-black' : 'bg-[var(--bg-card)] text-[var(--text-secondary)]'"
         >
-      </button>
-      <button
-        @click="setFilter('cheap')"
-        class="flex flex-col items-center gap-1.5"
-      >
-        <div
-          class="w-12 h-12 rounded-2xl flex items-center justify-center"
-          :style="{
-            background:
-              activeFilter === 'cheap' ? 'var(--accent)' : 'var(--bg-card)',
-          }"
-        >
-          <Wallet
-            :size="20"
-            :style="{
-              color: activeFilter === 'cheap' ? '#000' : 'var(--accent)',
-            }"
-          />
-        </div>
-        <span
-          class="text-[11px] font-medium"
-          style="color: var(--text-secondary)"
-          >Arzonlar</span
-        >
-      </button>
+          <Wallet :size="14" />
+          Arzonlar
+        </button>
+      </div>
     </div>
 
     <!-- Popular Barber (Featured) -->
@@ -211,14 +172,6 @@
         <h3 class="text-[17px] font-bold">
           {{ search ? "Natijalar" : "Sizga yaqin" }}
         </h3>
-        <button
-          v-if="!search"
-          @click="setFilter('all')"
-          class="text-[13px] font-semibold"
-          style="color: var(--accent)"
-        >
-          Hammasi
-        </button>
       </div>
 
       <div class="grid grid-cols-2 gap-3">
