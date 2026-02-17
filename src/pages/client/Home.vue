@@ -16,8 +16,9 @@
         </div>
       </div>
       <div class="flex gap-2">
-        <button class="w-9 h-9 rounded-full flex items-center justify-center" style="background: var(--bg-card);">
+        <button @click="$router.push('/c/favorites')" class="w-9 h-9 rounded-full flex items-center justify-center relative" style="background: var(--bg-card);">
           <Heart :size="18" style="color: var(--accent);" />
+          <span v-if="favoritesStore.favoritesCount > 0" class="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center" style="background: var(--accent); color: #000;">{{ favoritesStore.favoritesCount }}</span>
         </button>
         <button @click="$router.push('/c/notifications')" class="w-9 h-9 rounded-full flex items-center justify-center relative" style="background: var(--bg-card);">
           <Bell :size="18" style="color: var(--accent);" />
@@ -29,7 +30,7 @@
     <!-- Search -->
     <div class="px-4 pt-1 pb-4">
       <div class="relative">
-        <Search :size="18" class="absolute left-3.5 top-1/2 -translate-y-1/2" style="color: var(--text-secondary);" />
+        <Search :size="18" class="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style="color: var(--text-secondary);" />
         <input v-model="search" type="text" placeholder="Sartarosh qidiring..." class="pl-11 pr-4" style="background: var(--bg-card); border-radius: 14px;" />
       </div>
     </div>
@@ -100,6 +101,9 @@
           <div class="relative">
             <img :src="barber.image" class="w-full h-28 object-cover" />
             <div class="absolute bottom-0 left-0 right-0 h-16" style="background: linear-gradient(to top, var(--bg-card), transparent);" />
+            <button @click.stop="toggleFavorite(barber.id)" class="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center backdrop-blur-sm" style="background: rgba(0,0,0,0.4);">
+              <Heart :size="14" :fill="favoritesStore.isFavorite(barber.id) ? 'var(--accent)' : 'transparent'" :style="{ color: favoritesStore.isFavorite(barber.id) ? 'var(--accent)' : '#fff' }" />
+            </button>
             <span class="absolute bottom-2 left-2.5 text-[13px] font-semibold truncate pr-2" style="color: var(--text-primary);">{{ barber.name }}</span>
           </div>
           <div class="px-2.5 py-2.5">
@@ -131,17 +135,24 @@
 import { ref, computed } from 'vue';
 import { useBarberStore } from '@/stores/barber';
 import { useNotificationStore } from '@/stores/notification';
+import { useFavoritesStore } from '@/stores/favorites';
 import { Search, Star, MapPin, Heart, Bell, Clock, Wallet, RefreshCcw } from 'lucide-vue-next';
 import telegram from '@/services/telegram';
 
 const barberStore = useBarberStore();
 const notifStore = useNotificationStore();
+const favoritesStore = useFavoritesStore();
 const search = ref('');
 const activeFilter = ref('all');
 
 const refreshLocation = () => {
   telegram.HapticFeedback?.impactOccurred('medium');
   telegram.showAlert?.("Joylashuvingiz yangilandi (simulyatsiya)");
+};
+
+const toggleFavorite = (barberId) => {
+  favoritesStore.toggleFavorite(barberId);
+  telegram.HapticFeedback?.impactOccurred('light');
 };
 
 const unread = computed(() => notifStore.notifications.filter(n => !n.read).length);

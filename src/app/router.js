@@ -23,6 +23,7 @@ const routes = [
         meta: { requiresAuth: true, role: 'mijoz' },
         children: [
             { path: 'home', component: () => import('@/pages/client/Home.vue'), name: 'client-home' },
+            { path: 'favorites', component: () => import('@/pages/client/Favorites.vue'), name: 'client-favorites' },
             { path: 'barber/:id', component: () => import('@/pages/client/BarberProfile.vue'), name: 'barber-profile' },
             { path: 'book/:id', component: () => import('@/pages/client/BookingWizard.vue'), name: 'booking-wizard' },
             { path: 'bookings', component: () => import('@/pages/client/MyBookings.vue'), name: 'client-bookings' },

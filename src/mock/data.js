@@ -25,10 +25,11 @@ export const mockBarbers = [
             'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400'
         ],
         services: [
-            { id: 's1', name: 'Soch olish', desc: 'Professional usta tomonidan zamonaviy uslubda soch olish.', price: 50000, duration: 30, image: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=200&h=200&fit=crop' },
-            { id: 's2', name: 'Soch + Soqol', desc: "Soch olish va soqolni professional tarzda shakllantirish.", price: 80000, duration: 50, image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=200&h=200&fit=crop' },
-            { id: 's3', name: 'Soch boyash', desc: "Professional bo'yoqlar bilan soch rangini o'zgartirish.", price: 120000, duration: 60, image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=200&h=200&fit=crop' },
-            { id: 's6', name: 'Soqol qirish', desc: "An'anaviy uslubda soqolni shakllantirish va qirish.", price: 30000, duration: 20, image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=200&h=200&fit=crop' }
+            { id: 's1', name: 'Soch olish', desc: 'Professional usta tomonidan zamonaviy uslubda soch olish.', price: 50000, duration: 30, category: 'Erkaklar', image: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=200&h=200&fit=crop' },
+            { id: 's2', name: 'Soch + Soqol', desc: "Soch olish va soqolni professional tarzda shakllantirish.", price: 80000, duration: 50, category: 'Erkaklar', image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=200&h=200&fit=crop' },
+            { id: 's3', name: 'Soch boyash', desc: "Professional bo'yoqlar bilan soch rangini o'zgartirish.", price: 120000, duration: 60, category: 'Ayollar', image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=200&h=200&fit=crop' },
+            { id: 's6', name: 'Soqol qirish', desc: "An'anaviy uslubda soqolni shakllantirish va qirish.", price: 30000, duration: 20, category: 'Erkaklar', image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=200&h=200&fit=crop' },
+            { id: 's11', name: 'Bolalar soch olish', desc: "Bolalar uchun maxsus qirqim.", price: 35000, duration: 25, category: 'Bolalar', image: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=200&h=200&fit=crop' }
         ],
         reviews: [
             { id: 'r1', user: 'Jasur M.', text: 'Juda yaxshi xizmat, tavsiya qilaman! Har doim shu yerga kelaman.', rating: 5, date: '12 Fev 2026' },
