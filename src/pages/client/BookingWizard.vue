@@ -13,13 +13,15 @@
           );
         "
       />
-      <button
-        @click="goBack"
-        class="absolute top-3 left-3 w-9 h-9 rounded-full flex items-center justify-center"
-        style="background: #00000066"
-      >
-        <ChevronLeft :size="22" style="color: var(--text-primary)" />
-      </button>
+      <div class="sticky top-0 z-50 px-3 pt-3 pointer-events-none">
+        <button
+          @click="goBack"
+          class="w-9 h-9 rounded-full flex items-center justify-center pointer-events-auto backdrop-blur-md"
+          style="background: rgba(0,0,0,0.4)"
+        >
+          <ChevronLeft :size="22" style="color: #fff" />
+        </button>
+      </div>
     </div>
 
     <div class="px-4 -mt-6 relative z-10">

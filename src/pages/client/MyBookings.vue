@@ -1,7 +1,11 @@
 <template>
   <div class="pb-24">
     <!-- Header -->
-    <div class="flex items-center justify-between px-4 pt-3 pb-2">
+    <!-- Header -->
+    <div 
+      class="flex items-center justify-between px-4 pt-3 pb-2 sticky top-0 z-50 backdrop-blur-md"
+      style="background: var(--bg-primary-alpha, rgba(22, 18, 12, 0.8));"
+    >
       <div class="flex items-center gap-3">
         <button @click="$router.back()" class="w-9 h-9 rounded-full flex items-center justify-center transition-active active:scale-95" style="background: var(--bg-card);">
           <ChevronLeft :size="20" style="color: var(--text-primary);" />

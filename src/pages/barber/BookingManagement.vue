@@ -1,6 +1,9 @@
 <template>
   <div class="pb-24">
-    <div class="flex items-center justify-between px-4 pt-3 pb-2">
+    <div 
+      class="flex items-center justify-between px-4 pt-3 pb-2 sticky top-0 z-50 backdrop-blur-md"
+      style="background: var(--bg-primary-alpha, rgba(22, 18, 12, 0.8));"
+    >
       <h1 class="text-xl font-bold">Navbatlar</h1>
       <div
         class="flex p-0.5 rounded-xl bg-[#1e1810]"

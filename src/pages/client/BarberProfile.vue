@@ -13,18 +13,20 @@
           );
         "
       />
-      <div class="absolute top-3 left-3 right-3 flex justify-between">
+      <div
+        class="sticky top-0 z-50 px-3 pt-3 flex justify-between pointer-events-none"
+      >
         <button
           @click="$router.back()"
-          class="w-9 h-9 rounded-full flex items-center justify-center"
-          style="background: #00000066"
+          class="w-9 h-9 rounded-full flex items-center justify-center pointer-events-auto backdrop-blur-md"
+          style="background: rgba(0, 0, 0, 0.4)"
         >
-          <ChevronLeft :size="22" style="color: var(--text-primary)" />
+          <ChevronLeft :size="22" style="color: #fff" />
         </button>
         <button
           @click="toggleFavorite"
-          class="w-9 h-9 rounded-full flex items-center justify-center"
-          style="background: #00000066"
+          class="w-9 h-9 rounded-full flex items-center justify-center pointer-events-auto backdrop-blur-md"
+          style="background: rgba(0, 0, 0, 0.4)"
         >
           <Heart
             :size="18"
@@ -202,7 +204,7 @@
             :src="service.image"
             class="w-16 h-16 rounded-xl object-cover shrink-0"
           />
-          <div class="flex-1 min-w-0">
+          <div class="flex-1 min-w-0 my-auto flex flex-col justify-between">
             <div class="flex items-center gap-2 mb-0.5">
               <span class="text-[15px] font-semibold">{{ service.name }}</span>
               <span
@@ -214,11 +216,7 @@
                 >{{ service.category || "Erkaklar" }}</span
               >
             </div>
-            <span
-              class="text-[12px] block mb-1.5 line-clamp-2"
-              style="color: var(--text-secondary)"
-              >{{ service.desc || "" }}</span
-            >
+
             <span class="text-[15px] font-bold" style="color: var(--accent)"
               >{{ service.price.toLocaleString() }} so'm</span
             >

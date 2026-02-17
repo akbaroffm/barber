@@ -1,7 +1,10 @@
 <template>
   <div class="pb-24">
     <!-- Header -->
-    <div class="flex items-center justify-between px-4 pt-3 pb-2">
+    <div 
+      class="flex items-center justify-between px-4 pt-3 pb-2 sticky top-0 z-50 backdrop-blur-md"
+      style="background: var(--bg-primary-alpha, rgba(22, 18, 12, 0.8));"
+    >
       <div class="flex items-center gap-3">
         <div
           class="w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold"
