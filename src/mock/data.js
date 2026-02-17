@@ -3,41 +3,112 @@ export const mockBarbers = [
         id: '1',
         name: 'Aziz Sartarosh',
         rating: 4.8,
+        reviewCount: 124,
         distance: '1.2 km',
         minPrice: 50000,
         address: 'Toshkent, Chilonzor 4-kvartal',
-        image: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400&h=400&fit=crop',
+        location: { lat: 41.2856, lng: 69.2053 },
+        workHours: '09:00 – 20:00',
+        isOpen: true,
+        about: "Aziz Sartarosh — Toshkentda yuqori sifatli soch olish xizmati. Zamonaviy asbob-uskunalar va tajribali ustalar bilan xizmatdamiz. Erkaklar va bolalar uchun soch olish, soqol qirish, styling va boshqa xizmatlar mavjud.",
+        image: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&h=500&fit=crop',
+        cover: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&h=500&fit=crop',
         portfolio: [
             'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400',
             'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400',
-            'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400'
+            'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400',
+            'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400'
         ],
         services: [
-            { id: 's1', name: 'Soch olish', price: 50000, duration: 30 },
-            { id: 's2', name: 'Soch + Soqol', price: 80000, duration: 50 },
-            { id: 's3', name: 'Bolalar uchun soch olish', price: 40000, duration: 40 }
+            { id: 's1', name: 'Soch olish', desc: 'Professional usta tomonidan zamonaviy uslubda soch olish.', price: 50000, duration: 30, image: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=200&h=200&fit=crop' },
+            { id: 's2', name: 'Soch + Soqol', desc: "Soch olish va soqolni professional tarzda shakllantirish.", price: 80000, duration: 50, image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=200&h=200&fit=crop' },
+            { id: 's3', name: 'Soch boyash', desc: "Professional bo'yoqlar bilan soch rangini o'zgartirish.", price: 120000, duration: 60, image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=200&h=200&fit=crop' },
+            { id: 's6', name: 'Soqol qirish', desc: "An'anaviy uslubda soqolni shakllantirish va qirish.", price: 30000, duration: 20, image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=200&h=200&fit=crop' }
         ],
         reviews: [
-            { id: 'r1', user: 'Jasur', text: 'Juda yaxshi xizmat, tavsiya qilaman!', rating: 5 },
-            { id: 'r2', user: 'Olim', text: 'Usta o‘z ishining ustasi.', rating: 4 }
+            { id: 'r1', user: 'Jasur M.', text: 'Juda yaxshi xizmat, tavsiya qilaman! Har doim shu yerga kelaman.', rating: 5 },
+            { id: 'r2', user: 'Olim K.', text: "Usta o'z ishining ustasi. Professional va toza.", rating: 4 },
+            { id: 'r3', user: 'Sardor A.', text: "Bolam uchun juda yaxshi oldi, yig'lamadi ham.", rating: 5 }
         ]
     },
     {
         id: '2',
         name: 'Sirojiddin Style',
         rating: 4.9,
+        reviewCount: 89,
         distance: '0.8 km',
         minPrice: 60000,
         address: 'Toshkent, Yunusobod 19-kvartal',
-        image: 'https://images.unsplash.com/photo-1592647425447-182564215944?w=400&h=400&fit=crop',
+        location: { lat: 41.3388, lng: 69.2855 },
+        workHours: '10:00 – 21:00',
+        isOpen: true,
+        about: "Sirojiddin Style — zamonaviy erkaklar soch turmagi. Kreativ va klassik soch olish xizmatlari, styling va boshqalar.",
+        image: 'https://images.unsplash.com/photo-1592647425447-182564215944?w=800&h=500&fit=crop',
+        cover: 'https://images.unsplash.com/photo-1592647425447-182564215944?w=800&h=500&fit=crop',
         portfolio: [
+            'https://images.unsplash.com/photo-1536520002442-39764a41e987?w=400',
+            'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400'
+        ],
+        services: [
+            { id: 's4', name: 'Kreativ soch olish', desc: "Zamonaviy va kreativ uslubda soch shakllantirish.", price: 70000, duration: 45, image: 'https://images.unsplash.com/photo-1536520002442-39764a41e987?w=200&h=200&fit=crop' },
+            { id: 's5', name: 'Styling', desc: "Professional styling va soch modellash.", price: 30000, duration: 20, image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=200&h=200&fit=crop' }
+        ],
+        reviews: [
+            { id: 'r4', user: 'Bekzod R.', text: "Eng yaxshi sartaroshxonalardan biri Toshkentda!", rating: 5 }
+        ]
+    },
+    {
+        id: '3',
+        name: 'Royal Barber',
+        rating: 4.6,
+        reviewCount: 56,
+        distance: '2.1 km',
+        minPrice: 45000,
+        address: 'Toshkent, Mirzo Ulug\'bek tumani',
+        location: { lat: 41.3100, lng: 69.3200 },
+        workHours: '08:00 – 19:00',
+        isOpen: false,
+        about: "Royal Barber — qulay narxlarda sifatli xizmat. Har bir mijozga individual yondashuv.",
+        image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&h=500&fit=crop',
+        cover: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&h=500&fit=crop',
+        portfolio: [
+            'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400'
+        ],
+        services: [
+            { id: 's7', name: 'Soch olish', desc: "Klassik va zamonaviy uslubda.", price: 45000, duration: 30, image: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=200&h=200&fit=crop' },
+            { id: 's8', name: 'Yuz parvarishi', desc: "Yuz tozalash va parvarish qilish.", price: 60000, duration: 40, image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=200&h=200&fit=crop' }
+        ],
+        reviews: [
+            { id: 'r5', user: 'Nodir T.', text: "Narx va sifat mos. Yaxshi joy.", rating: 4 }
+        ]
+    },
+    {
+        id: '4',
+        name: 'Gentleman Club',
+        rating: 4.7,
+        reviewCount: 203,
+        distance: '3.5 km',
+        minPrice: 70000,
+        address: 'Toshkent, Sergeli tumani',
+        location: { lat: 41.2300, lng: 69.2100 },
+        workHours: '10:00 – 22:00',
+        isOpen: true,
+        about: "Gentleman Club — premium sartaroshxona. Yuqori sifatli xizmat va dam olish muhiti.",
+        image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&h=500&fit=crop',
+        cover: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&h=500&fit=crop',
+        portfolio: [
+            'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400',
+            'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400',
             'https://images.unsplash.com/photo-1536520002442-39764a41e987?w=400'
         ],
         services: [
-            { id: 's4', name: 'Kreativ soch olish', price: 70000, duration: 45 },
-            { id: 's5', name: 'Styling', price: 30000, duration: 20 }
+            { id: 's9', name: 'Premium soch olish', desc: "VIP xizmat — pul tejash uchun emas.", price: 100000, duration: 45, image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=200&h=200&fit=crop' },
+            { id: 's10', name: 'Soqol modellash', desc: "Soqolni shaklga keltirish va parvarish.", price: 70000, duration: 35, image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=200&h=200&fit=crop' }
         ],
-        reviews: []
+        reviews: [
+            { id: 'r6', user: 'Sherzod B.', text: "Premium xizmat! Tavsiya qilaman.", rating: 5 },
+            { id: 'r7', user: 'Farrux N.', text: "Eng yaxshi joy, atmosfera ajoyib.", rating: 5 }
+        ]
     }
 ];
 

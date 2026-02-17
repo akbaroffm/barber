@@ -24,7 +24,7 @@ export const useBookingStore = defineStore('booking', {
                 type: 'info'
             });
         },
-        updateBookingStatus(id, status) {
+        async updateBookingStatus(id, status) {
             const index = this.bookings.findIndex(b => b.id === id);
             if (index !== -1) {
                 this.bookings[index].status = status;
@@ -39,6 +39,10 @@ export const useBookingStore = defineStore('booking', {
                         message: `Sizning ${booking.serviceName} uchun broningiz tasdiqlandi.`,
                         type: 'success'
                     });
+                } else if (status === 'bajarilgan') {
+                    const { useFinanceStore } = await import('./finance');
+                    const financeStore = useFinanceStore();
+                    financeStore.addIncomeFromBooking(booking);
                 } else if (status === 'bekor') {
                     notificationStore.addNotification({
                         title: 'Bron rad etildi',

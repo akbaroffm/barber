@@ -40,6 +40,7 @@ const routes = [
             { path: 'services', component: () => import('@/pages/barber/ServicesList.vue'), name: 'barber-services' },
             { path: 'schedule', component: () => import('@/pages/barber/Schedule.vue'), name: 'barber-schedule' },
             { path: 'portfolio', component: () => import('@/pages/barber/PortfolioAchievements.vue'), name: 'barber-portfolio' },
+            { path: 'finance', component: () => import('@/pages/barber/Finance.vue'), name: 'barber-finance' },
             { path: 'settings', component: () => import('@/pages/barber/Settings.vue'), name: 'barber-settings' }
         ]
     }
