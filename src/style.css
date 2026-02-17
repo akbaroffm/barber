@@ -49,12 +49,12 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 0;
+  display: none;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-dim);
-  border-radius: 10px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-track {
