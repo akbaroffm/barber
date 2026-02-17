@@ -1,6 +1,6 @@
 <template>
   <div class="pb-24">
-    <TopBar title="Moliya" />
+    <TopBar title="Moliya" showBack />
 
     <div class="px-4 pt-2">
       <!-- Premium Profit Card -->

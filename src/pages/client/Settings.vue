@@ -34,7 +34,26 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import TopBar from '@/components/shared/TopBar.vue';
 import telegram from '@/services/telegram';
+import storage from '@/utils/storage';
+
 const authStore = useAuthStore();
 const router = useRouter();
-const changeRole = () => { authStore.logout(); router.push('/role'); };
+
+const changeRole = () => { 
+  const perform = () => {
+    telegram.HapticFeedback?.impactOccurred('medium');
+    storage.remove('user_role');
+    storage.remove('user_data');
+    authStore.logout(); 
+    window.location.href = '/role';
+  };
+
+  if (telegram.showConfirm) {
+    telegram.showConfirm("Rolni o'zgartirmoqchimisiz? Joriy sessiya tugatiladi.", (ok) => {
+      if (ok) perform();
+    });
+  } else {
+    if (confirm("Rolni o'zgartirmoqchimisiz?")) perform();
+  }
+};
 </script>

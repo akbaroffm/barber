@@ -2,7 +2,12 @@
   <div class="pb-24">
     <!-- Header -->
     <div class="flex items-center justify-between px-4 pt-3 pb-2">
-      <h1 class="text-xl font-bold">Navbatlarim</h1>
+      <div class="flex items-center gap-3">
+        <button @click="$router.back()" class="w-9 h-9 rounded-full flex items-center justify-center transition-active active:scale-95" style="background: var(--bg-card);">
+          <ChevronLeft :size="20" style="color: var(--text-primary);" />
+        </button>
+        <h1 class="text-xl font-bold">Navbatlarim</h1>
+      </div>
       <button class="w-8 h-8 rounded-full flex items-center justify-center" style="background: var(--bg-card);">
         <MoreHorizontal :size="18" style="color: var(--text-secondary);" />
       </button>
@@ -181,7 +186,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useBookingStore } from '@/stores/booking';
-import { CalendarDays, MoreHorizontal, MoreVertical, Users, Clock, Star, MapPin, Phone, Navigation } from 'lucide-vue-next';
+import { CalendarDays, MoreHorizontal, MoreVertical, Users, Clock, Star, MapPin, Phone, Navigation, ChevronLeft } from 'lucide-vue-next';
 
 const bookingStore = useBookingStore();
 const activeTab = ref('all');

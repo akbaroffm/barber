@@ -40,23 +40,25 @@
       </div>
 
       <!-- Location card (tappable) -->
-      <button @click="openLocation" class="w-full flex items-center gap-3 p-3 rounded-2xl mb-5 text-left" style="background: var(--bg-card);">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--accent-dim);">
-          <MapPin :size="18" style="color: var(--accent);" />
-        </div>
-        <div class="flex-1 min-w-0">
-          <span class="text-[11px] block" style="color: var(--text-secondary);">Manzil</span>
-          <span class="text-[14px] font-semibold truncate block" style="color: var(--accent);">{{ barber.address }}</span>
+      <div class="w-full flex items-center gap-3 p-3 rounded-2xl mb-5 text-left" style="background: var(--bg-card);">
+        <div @click="openLocation" class="flex flex-1 items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: var(--accent-dim);">
+            <MapPin :size="18" style="color: var(--accent);" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <span class="text-[11px] block" style="color: var(--text-secondary);">Manzil</span>
+            <span class="text-[14px] font-semibold truncate block" style="color: var(--accent);">{{ barber.address }}</span>
+          </div>
         </div>
         <div class="flex gap-2 shrink-0">
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: var(--bg-elevated);">
+          <a :href="'tel:' + barber.phone.replace(/\s/g, '')" @click.stop="telegram.HapticFeedback?.impactOccurred('light')" class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: var(--bg-elevated);">
             <Phone :size="16" style="color: var(--accent);" />
-          </div>
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: var(--accent);">
+          </a>
+          <div @click.stop="openLocation" class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: var(--accent);">
             <Navigation :size="16" style="color: #000;" />
           </div>
         </div>
-      </button>
+      </div>
 
       <!-- Tabs -->
       <div class="flex gap-0 mb-4 overflow-x-auto" style="border-bottom: 0.5px solid var(--separator);">

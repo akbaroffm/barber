@@ -7,10 +7,12 @@
           {{ telegram.user.first_name?.[0] || 'M' }}
         </div>
         <div>
-          <span class="text-[11px] block" style="color: var(--text-secondary);">Yaqin sartaroshlar</span>
-          <span class="text-[14px] font-semibold flex items-center gap-1">
-            <MapPin :size="13" style="color: var(--accent);" /> Toshkent, O'zbekiston
-          </span>
+          <span class="text-[11px] block" style="color: var(--text-secondary);">Sizning manzilingiz</span>
+          <button @click="refreshLocation" class="text-[14px] font-bold flex items-center gap-1.5 transition-active active:opacity-50">
+            <MapPin :size="13" style="color: var(--accent);" /> 
+            <span>Toshkent, O'zbekiston</span>
+            <RefreshCcw :size="10" class="opacity-40" />
+          </button>
         </div>
       </div>
       <div class="flex gap-2">
@@ -129,13 +131,18 @@
 import { ref, computed } from 'vue';
 import { useBarberStore } from '@/stores/barber';
 import { useNotificationStore } from '@/stores/notification';
-import { Search, Star, MapPin, Heart, Bell, Clock, Wallet } from 'lucide-vue-next';
+import { Search, Star, MapPin, Heart, Bell, Clock, Wallet, RefreshCcw } from 'lucide-vue-next';
 import telegram from '@/services/telegram';
 
 const barberStore = useBarberStore();
 const notifStore = useNotificationStore();
 const search = ref('');
 const activeFilter = ref('all');
+
+const refreshLocation = () => {
+  telegram.HapticFeedback?.impactOccurred('medium');
+  telegram.showAlert?.("Joylashuvingiz yangilandi (simulyatsiya)");
+};
 
 const unread = computed(() => notifStore.notifications.filter(n => !n.read).length);
 const popularBarber = computed(() => [...barberStore.barbers].sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0))[0]);

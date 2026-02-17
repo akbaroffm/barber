@@ -12,9 +12,9 @@ export const telegram = {
     BackButton: WebApp?.BackButton,
     HapticFeedback: WebApp?.HapticFeedback,
     
-    showPopup: (params) => WebApp?.showPopup(params),
-    showAlert: (message) => WebApp?.showAlert(message),
-    showConfirm: (message, callback) => WebApp?.showConfirm(message, callback),
+    showPopup: WebApp ? (params) => WebApp.showPopup(params) : null,
+    showAlert: WebApp ? (message) => WebApp.showAlert(message) : null,
+    showConfirm: WebApp ? (message, callback) => WebApp.showConfirm(message, callback) : null,
     
     setHeaderColor: (color) => WebApp?.setHeaderColor(color),
     setBackgroundColor: (color) => WebApp?.setBackgroundColor(color),

@@ -8,9 +8,17 @@ export const useBarberStore = defineStore('barber', {
         myServices: storage.get('barber_services', mockBarbers[0].services),
         mySchedule: storage.get('barber_schedule', mockSchedule),
         myPortfolio: storage.get('barber_portfolio', mockBarbers[0].portfolio),
+        certificates: storage.get('barber_certificates', mockBarbers[0].certificates || []),
         achievements: storage.get('barber_achievements', ['Top 10', 'Master'])
     }),
+    getters: {
+        currentUser: (state) => state.barbers[0] // Mocking current user
+    },
     actions: {
+        addCertificate(url) {
+            this.certificates.push(url);
+            storage.set('barber_certificates', this.certificates);
+        },
         addService(service) {
             this.myServices.push({ ...service, id: Date.now().toString() });
             storage.set('barber_services', this.myServices);
