@@ -28,9 +28,7 @@
         :lat-lng="[marker.lat, marker.lng]"
         :icon="defaultIcon"
         @click="$emit('marker-click', marker)"
-      >
-        <l-tooltip>{{ marker.title }}</l-tooltip>
-      </l-marker>
+      />
     </l-map>
 
     <!-- Controls -->
@@ -53,7 +51,6 @@ import {
   LMap,
   LTileLayer,
   LMarker,
-  LTooltip,
 } from "@vue-leaflet/vue-leaflet";
 // Fix default icon issues using CDN
 // We define explicit icon object below instead of relying on global defaults

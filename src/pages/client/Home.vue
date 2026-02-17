@@ -375,8 +375,38 @@
         />
       </div>
 
-      <!-- Selected Barber Preview (if any) -->
-      <!-- We could add a small preview card here when a marker is clicked, but simple navigation is easier for now -->
+      <!-- Selected Barber Preview Card -->
+      <div 
+        v-if="selectedBarber"
+        class="absolute bottom-6 left-4 right-4 bg-[var(--bg-card)] p-4 rounded-2xl shadow-xl z-[401] animate-up"
+        @click="goToProfile(selectedBarber.id)"
+      >
+        <div class="flex items-start gap-4">
+          <img 
+            :src="selectedBarber.image" 
+            class="w-16 h-16 rounded-xl object-cover bg-gray-800"
+          />
+          <div class="flex-1 min-w-0">
+            <h3 class="text-[16px] font-bold mb-1 truncate">{{ selectedBarber.name }}</h3>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="flex items-center gap-1 text-[12px] font-medium text-[var(--accent)]">
+                <Star :size="12" fill="currentColor" /> {{ selectedBarber.rating }}
+              </span>
+              <span class="text-[12px] text-gray-500">•</span>
+              <span class="text-[12px] text-gray-400">{{ selectedBarber.distance }}</span>
+            </div>
+            <p class="text-[12px] text-gray-400 capitalize">
+              {{ selectedBarber.isOpen ? 'Ochiq' : 'Yopiq' }} • {{ selectedBarber.workHours }}
+            </p>
+          </div>
+          <button 
+            class="w-10 h-10 rounded-full bg-[var(--accent)] text-black flex items-center justify-center shrink-0"
+            @click.stop="goToProfile(selectedBarber.id)"
+          >
+            <ChevronRight :size="20" />
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Map Float Button -->
@@ -416,7 +446,8 @@ import {
   Wallet,
   RefreshCcw,
   Map,
-  X
+  X,
+  ChevronRight
 } from "lucide-vue-next";
 import telegram from "@/services/telegram";
 
@@ -428,6 +459,7 @@ const router = useRouter();
 const search = ref("");
 const activeFilter = ref("all");
 const isMapOpen = ref(false);
+const selectedBarber = ref(null);
 
 // Location State
 const isLocationPickerOpen = ref(false);
@@ -465,6 +497,11 @@ const confirmLocation = () => {
   isLocationPickerOpen.value = false;
 };
 
+const refreshLocation = () => {
+  telegram.HapticFeedback?.impactOccurred("medium");
+  telegram.showAlert?.("Joylashuvingiz yangilandi (simulyatsiya)");
+};
+
 const toggleFavorite = (barberId) => {
   favoritesStore.toggleFavorite(barberId);
   telegram.HapticFeedback?.impactOccurred("light");
@@ -472,11 +509,21 @@ const toggleFavorite = (barberId) => {
 
 const openMap = () => {
   isMapOpen.value = true;
+  selectedBarber.value = null; // Reset selection
   telegram.HapticFeedback?.impactOccurred("light");
 };
 
 const handleMarkerClick = (marker) => {
-  router.push(`/c/barber/${marker.id}`);
+  // Find full barber details
+  const barber = barbersWithDistance.value.find(b => b.id === marker.id);
+  if (barber) {
+    selectedBarber.value = barber;
+    telegram.HapticFeedback?.impactOccurred("light");
+  }
+};
+
+const goToProfile = (id) => {
+  router.push(`/c/barber/${id}`);
 };
 
 const unread = computed(
