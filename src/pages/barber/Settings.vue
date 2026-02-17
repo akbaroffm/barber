@@ -258,6 +258,7 @@ import { useRouter } from "vue-router";
 import TopBar from "@/components/shared/TopBar.vue";
 import BottomSheet from "@/components/ui/BottomSheet.vue";
 import BaseMap from "@/components/common/BaseMap.vue";
+import { getAddressFromCoordinates } from "@/utils/location";
 import {
   ChevronRight,
   Clock,
@@ -300,10 +301,13 @@ const openMapPicker = () => {
   isMapOpen.value = true;
 };
 
-const handleLocationUpdate = ({ lat, lng }) => {
+const handleLocationUpdate = async ({ lat, lng }) => {
   tempLocation.value = { lat, lng };
-  // In a real app, use reverse geocoding API here
-  tempAddress.value = `Toshkent, ${lat.toFixed(4)}, ${lng.toFixed(4)}`; 
+  tempAddress.value = "Manzil aniqlanmoqda...";
+  
+  // Use reverse geocoding
+  const address = await getAddressFromCoordinates(lat, lng);
+  tempAddress.value = address;
 };
 
 const confirmMapSelection = () => {

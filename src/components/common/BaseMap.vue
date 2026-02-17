@@ -18,19 +18,15 @@
       <l-marker
         v-if="mode === 'select' && selectedLocation"
         :lat-lng="selectedLocation"
-      >
-        <l-icon
-          :icon-size="[32, 32]"
-          :icon-anchor="[16, 32]"
-          icon-url="/marker-icon.png"
-        />
-      </l-marker>
+        :icon="defaultIcon"
+      />
 
       <!-- Barber Markers (View Mode) -->
       <l-marker
         v-for="marker in markers"
         :key="marker.id"
         :lat-lng="[marker.lat, marker.lng]"
+        :icon="defaultIcon"
         @click="$emit('marker-click', marker)"
       >
         <l-tooltip>{{ marker.title }}</l-tooltip>
@@ -57,24 +53,11 @@ import {
   LMap,
   LTileLayer,
   LMarker,
-  LIcon,
   LTooltip,
 } from "@vue-leaflet/vue-leaflet";
-import { MapPin } from "lucide-vue-next";
-
-// Fix for missing marker icons in Webpack/Vite
+// Fix default icon issues using CDN
+// We define explicit icon object below instead of relying on global defaults
 import L from "leaflet";
-import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
-import iconUrl from "leaflet/dist/images/marker-icon.png";
-import shadowUrl from "leaflet/dist/images/marker-shadow.png";
-
-// Fix default icon issues
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl,
-});
 
 const props = defineProps({
   mode: {
@@ -101,6 +84,17 @@ const zoom = ref(13);
 const center = ref(props.initialCenter);
 const selectedLocation = ref(props.initialLocation);
 const map = ref(null);
+
+const defaultIcon = L.icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+});
 
 // Watchers
 watch(

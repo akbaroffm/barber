@@ -403,7 +403,7 @@ import { useFavoritesStore } from "@/stores/favorites";
 import { useRouter } from "vue-router";
 import BaseMap from "@/components/common/BaseMap.vue";
 import BottomSheet from "@/components/ui/BottomSheet.vue"; // Imported BottomSheet
-import { calculateDistance } from "@/utils/location"; // Imported distance utility
+import { calculateDistance, getAddressFromCoordinates } from "@/utils/location"; // Imported distance utility
 import storage from "@/utils/storage";
 
 import {
@@ -443,10 +443,13 @@ const openLocationPicker = () => {
   isLocationPickerOpen.value = true;
 };
 
-const handleLocationUpdate = ({ lat, lng }) => {
+const handleLocationUpdate = async ({ lat, lng }) => {
   tempLocation.value = { lat, lng };
-  // Simulating reverse geocoding
-  tempAddress.value = `Toshkent, ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  tempAddress.value = "Manzil aniqlanmoqda...";
+  
+  // Use reverse geocoding
+  const address = await getAddressFromCoordinates(lat, lng);
+  tempAddress.value = address;
 };
 
 const confirmLocation = () => {

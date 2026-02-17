@@ -1,3 +1,33 @@
+export async function getAddressFromCoordinates(lat, lng) {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
+      {
+        headers: {
+          'Accept-Language': 'uz-UZ,uz;q=0.9,ru;q=0.8,en;q=0.7'
+        }
+      }
+    );
+    const data = await response.json();
+    
+    if (data.address) {
+      const road = data.address.road || data.address.pedestrian || data.address.suburb || "";
+      const house = data.address.house_number ? `, ${data.address.house_number}-uy` : "";
+      const city = data.address.city || data.address.town || data.address.county || "";
+      
+      // Construct a cleaner address string
+      if (road) {
+        return `${city ? city + ', ' : ''}${road}${house}`;
+      }
+      return data.display_name.split(',').slice(0, 3).join(',');
+    }
+    return "Noma'lum manzil";
+  } catch (e) {
+    console.error("Geocoding error:", e);
+    return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  }
+}
+
 export function calculateDistance(lat1, lon1, lat2, lon2) {
   if (!lat1 || !lon1 || !lat2 || !lon2) return 0;
   
