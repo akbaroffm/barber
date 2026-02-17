@@ -18,4 +18,5 @@ export default defineConfig({
     host: true, // IP orqali ochish uchun
     port: 5173,
   },
+
 })
