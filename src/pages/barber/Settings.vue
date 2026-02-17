@@ -336,10 +336,8 @@ const changeRole = () => {
     storage.remove("user_role");
     storage.remove("user_data");
     authStore.logout();
-    // Use router.push with force reload
-    router.push('/role').then(() => {
-      window.location.reload();
-    });
+    // Use router.replace to avoid server 404s
+    router.replace('/role');
   };
 
   if (telegram.showConfirm) {
