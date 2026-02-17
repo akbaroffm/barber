@@ -1,21 +1,19 @@
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-    <div class="mb-8 p-4 bg-primary/10 rounded-full">
-      <Scissors :size="64" class="text-primary" />
+  <div class="flex flex-col items-center justify-center min-h-screen px-6 text-center">
+    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style="background: var(--tg-secondary);">
+      <Scissors :size="32" style="color: var(--tg-link);" />
     </div>
-    <h1 class="text-3xl font-bold mb-4">Barber App</h1>
-    <p class="text-hint mb-12">
-      Sizga yaqin bo‘lgan eng yaxshi sartaroshlarni toping va onlayn navbatga yoziling.
+    <h1 class="text-2xl font-bold mb-2">Barber App</h1>
+    <p class="text-[15px] mb-10" style="color: var(--tg-hint);">
+      Eng yaxshi sartaroshlarni toping va<br/>onlayn navbatga yoziling
     </p>
-    
-    <div class="w-full space-y-4">
-      <router-link 
-        to="/role" 
-        class="block w-full bg-button text-button py-4 rounded-xl font-semibold text-lg"
-      >
-        Boshlash
-      </router-link>
-    </div>
+    <router-link
+      to="/role"
+      class="w-full py-3.5 rounded-xl text-[17px] font-semibold text-center block"
+      style="background: var(--tg-btn); color: var(--tg-btn-text);"
+    >
+      Boshlash
+    </router-link>
   </div>
 </template>
 

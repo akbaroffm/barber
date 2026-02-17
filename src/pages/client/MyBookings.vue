@@ -1,47 +1,38 @@
 <template>
-  <div class="flex flex-col pb-20">
+  <div class="pb-24">
     <TopBar title="Navbatlarim" />
-    
-    <div class="px-4 mt-4">
-      <div v-if="bookings.length === 0" class="py-20 text-center">
-        <div class="mb-4 flex justify-center text-hint">
-          <Calendar :size="48" />
+
+    <div v-if="bookings.length === 0" class="flex flex-col items-center pt-24 text-center px-6">
+      <CalendarDays :size="40" style="color: var(--tg-hint); opacity: 0.3;" />
+      <p class="text-[15px] mt-4 mb-4" style="color: var(--tg-hint);">Navbatlar hali yo'q</p>
+      <button @click="$router.push('/c/home')" class="text-[15px] font-semibold" style="color: var(--tg-link);">
+        Sartarosh qidirish
+      </button>
+    </div>
+
+    <div v-else class="px-4 pt-2 flex flex-col gap-2.5">
+      <div
+        v-for="booking in bookings"
+        :key="booking.id"
+        class="p-4 rounded-2xl"
+        style="background: var(--tg-secondary);"
+      >
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <span class="text-[15px] font-semibold block">{{ booking.barberName }}</span>
+            <span class="text-[13px]" style="color: var(--tg-hint);">{{ booking.serviceName }}</span>
+          </div>
+          <span
+            class="text-[11px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-md"
+            :style="statusStyle[booking.status]"
+          >
+            {{ statusLabels[booking.status] }}
+          </span>
         </div>
-        <p class="text-hint">Hozircha navbatlar mavjud emas</p>
-        <button 
-          @click="router.push('/c/home')"
-          class="mt-6 text-link font-bold"
-        >
-          Sartarosh qidirish
-        </button>
-      </div>
-      
-      <div v-else class="space-y-4">
-        <Card v-for="booking in bookings" :key="booking.id" class="p-4">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <h4 class="font-bold text-lg leading-tight">{{ booking.barberName }}</h4>
-              <p class="text-sm text-hint">{{ booking.serviceName }}</p>
-            </div>
-            <div 
-              class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
-              :class="statusColors[booking.status]"
-            >
-              {{ statusLabels[booking.status] }}
-            </div>
-          </div>
-          
-          <div class="flex gap-4 text-sm border-t border-gray-100 pt-3">
-            <div class="flex items-center gap-1.5 text-link italic">
-              <Calendar :size="14" />
-              <span>{{ formatDate(booking.date) }}</span>
-            </div>
-            <div class="flex items-center gap-1.5 text-link font-bold">
-              <Clock :size="14" />
-              <span>{{ booking.time }}</span>
-            </div>
-          </div>
-        </Card>
+        <div class="flex gap-4 text-[13px] font-medium" style="color: var(--tg-link);">
+          <span class="flex items-center gap-1"><CalendarDays :size="13" /> {{ formatDate(booking.date) }}</span>
+          <span class="flex items-center gap-1"><Clock :size="13" /> {{ booking.time }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -49,35 +40,20 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { useBookingStore } from '@/stores/booking';
 import TopBar from '@/components/shared/TopBar.vue';
-import Card from '@/components/ui/Card.vue';
-import { Calendar, Clock } from 'lucide-vue-next';
+import { CalendarDays, Clock } from 'lucide-vue-next';
 
-const router = useRouter();
 const bookingStore = useBookingStore();
+const bookings = computed(() => [...bookingStore.bookings].reverse());
 
-const bookings = computed(() => {
-  return [...bookingStore.bookings].reverse();
-});
-
-const statusLabels = {
-  yangi: 'Kutilmoqda',
-  tasdiqlangan: 'Tasdiqlangan',
-  bajarilgan: 'Bajarildi',
-  bekor: 'Bekor qilindi'
+const statusLabels = { yangi: 'Kutilmoqda', tasdiqlangan: 'Tasdiqlangan', bajarilgan: 'Bajarildi', bekor: 'Bekor' };
+const statusStyle = {
+  yangi: { background: '#ff950015', color: '#ff9500' },
+  tasdiqlangan: { background: '#34c75915', color: '#34c759' },
+  bajarilgan: { background: '#007aff15', color: '#007aff' },
+  bekor: { background: '#ff3b3015', color: '#ff3b30' }
 };
 
-const statusColors = {
-  yangi: 'bg-yellow-100 text-yellow-700',
-  tasdiqlangan: 'bg-green-100 text-green-700',
-  bajarilgan: 'bg-blue-100 text-blue-700',
-  bekor: 'bg-red-100 text-red-700'
-};
-
-const formatDate = (dateStr) => {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long' });
-};
+const formatDate = (d) => new Date(d).toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long' });
 </script>

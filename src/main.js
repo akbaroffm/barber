@@ -11,15 +11,18 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 
-// Initialize Telegram WebApp
 telegram.ready();
 telegram.expand();
 
-// Apply Telegram theme colors to document
-document.documentElement.style.setProperty('--tg-theme-bg-color', telegram.themeParams.bg_color || '#ffffff');
-document.documentElement.style.setProperty('--tg-theme-text-color', telegram.themeParams.text_color || '#000000');
-document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', telegram.themeParams.secondary_bg_color || '#efeff3');
-document.documentElement.style.setProperty('--tg-theme-button-color', telegram.themeParams.button_color || '#2481cc');
-document.documentElement.style.setProperty('--tg-theme-button-text-color', telegram.themeParams.button_text_color || '#ffffff');
+// Apply Telegram theme
+const tp = telegram.themeParams;
+const root = document.documentElement.style;
+root.setProperty('--tg-bg', tp.bg_color || '#ffffff');
+root.setProperty('--tg-text', tp.text_color || '#1a1a1a');
+root.setProperty('--tg-hint', tp.hint_color || '#8e8e93');
+root.setProperty('--tg-link', tp.link_color || '#007aff');
+root.setProperty('--tg-btn', tp.button_color || '#007aff');
+root.setProperty('--tg-btn-text', tp.button_text_color || '#ffffff');
+root.setProperty('--tg-secondary', tp.secondary_bg_color || '#f2f2f7');
 
 app.mount('#app');

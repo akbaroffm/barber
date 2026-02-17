@@ -1,29 +1,37 @@
 <template>
-  <div class="min-h-screen flex flex-col p-6">
-    <h1 class="text-2xl font-bold mt-12 mb-2">Xush kelibsiz!</h1>
-    <p class="text-hint mb-12">Ilovadan foydalanish uchun rolingizni tanlang:</p>
-    
-    <div class="space-y-4">
-      <button 
+  <div class="min-h-screen flex flex-col px-6 pt-16">
+    <h1 class="text-2xl font-bold mb-1">Xush kelibsiz!</h1>
+    <p class="text-[15px] mb-10" style="color: var(--tg-hint);">Rolingizni tanlang</p>
+
+    <div class="flex flex-col gap-3">
+      <button
         @click="selectRole('mijoz')"
-        class="w-full p-6 bg-secondary-telegram rounded-2xl text-left flex items-center justify-between border-2 border-transparent hover:border-link transition-all"
+        class="flex items-center gap-4 p-4 rounded-2xl text-left"
+        style="background: var(--tg-secondary);"
       >
-        <div>
-          <span class="block text-xl font-bold">Men mijozman</span>
-          <span class="text-sm text-hint">Sartarosh qidirish va yozilish</span>
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: var(--tg-bg);">
+          <User :size="22" style="color: var(--tg-link);" />
         </div>
-        <User :size="32" class="text-link" />
+        <div class="flex-1">
+          <span class="block text-[17px] font-semibold">Men mijozman</span>
+          <span class="text-[13px]" style="color: var(--tg-hint);">Sartarosh qidirish va yozilish</span>
+        </div>
+        <ChevronRight :size="20" style="color: var(--tg-hint);" />
       </button>
-      
-      <button 
+
+      <button
         @click="selectRole('sartarosh')"
-        class="w-full p-6 bg-secondary-telegram rounded-2xl text-left flex items-center justify-between border-2 border-transparent hover:border-link transition-all"
+        class="flex items-center gap-4 p-4 rounded-2xl text-left"
+        style="background: var(--tg-secondary);"
       >
-        <div>
-          <span class="block text-xl font-bold">Men sartaroshman</span>
-          <span class="text-sm text-hint">Mijozlarni boshqarish va xizmatlar</span>
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: var(--tg-bg);">
+          <Scissors :size="22" style="color: var(--tg-link);" />
         </div>
-        <Scissors :size="32" class="text-link" />
+        <div class="flex-1">
+          <span class="block text-[17px] font-semibold">Men sartaroshman</span>
+          <span class="text-[13px]" style="color: var(--tg-hint);">Mijozlar va xizmatlarni boshqarish</span>
+        </div>
+        <ChevronRight :size="20" style="color: var(--tg-hint);" />
       </button>
     </div>
   </div>
@@ -32,7 +40,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import { User, Scissors } from 'lucide-vue-next';
+import { User, Scissors, ChevronRight } from 'lucide-vue-next';
 import telegram from '@/services/telegram';
 
 const router = useRouter();
@@ -40,12 +48,7 @@ const authStore = useAuthStore();
 
 const selectRole = (role) => {
   authStore.setRole(role);
-  telegram.HapticFeedback.impactOccurred('medium');
-  
-  if (role === 'mijoz') {
-    router.push('/c/home');
-  } else {
-    router.push('/b/dashboard');
-  }
+  telegram.HapticFeedback?.impactOccurred('medium');
+  router.push(role === 'mijoz' ? '/c/home' : '/b/dashboard');
 };
 </script>

@@ -1,75 +1,50 @@
 <template>
-  <div class="flex flex-col pb-20">
+  <div class="pb-24">
     <TopBar title="Xizmatlar" />
-    
-    <div class="px-4 mt-4 space-y-4">
-      <div v-if="barberStore.myServices.length === 0" class="py-20 text-center">
-        <p class="text-hint">Xizmatlar qo‘shilmagan</p>
+
+    <div class="px-4 pt-2">
+      <div v-if="barberStore.myServices.length === 0" class="flex flex-col items-center pt-20 text-center">
+        <p class="text-[15px]" style="color: var(--tg-hint);">Xizmatlar qo'shilmagan</p>
       </div>
-      
-      <Card v-for="service in barberStore.myServices" :key="service.id" class="p-4 flex justify-between items-center">
-        <div>
-          <h4 class="font-bold">{{ service.name }}</h4>
-          <p class="text-xs text-hint">{{ service.duration }} daqiqa • {{ service.price.toLocaleString() }} so‘m</p>
+
+      <div v-else class="rounded-2xl overflow-hidden mb-4" style="background: var(--tg-secondary);">
+        <div
+          v-for="(s, i) in barberStore.myServices"
+          :key="s.id"
+          class="flex items-center justify-between px-4 py-3.5"
+          :style="i < barberStore.myServices.length - 1 ? 'border-bottom: 0.5px solid var(--tg-separator)' : ''"
+        >
+          <div>
+            <span class="text-[15px] font-medium block">{{ s.name }}</span>
+            <span class="text-[13px]" style="color: var(--tg-hint);">{{ s.duration }} daq · {{ s.price.toLocaleString() }} so'm</span>
+          </div>
+          <div class="flex gap-3">
+            <button @click="editService(s)" class="text-[13px] font-medium" style="color: var(--tg-link);">Tahrir</button>
+            <button @click="deleteService(s.id)" class="text-[13px] font-medium" style="color: var(--tg-destructive);">O'chir</button>
+          </div>
         </div>
-        <div class="flex gap-2">
-          <button @click="editService(service)" class="p-2 text-link bg-link/5 rounded-lg">
-            <Edit2 :size="18" />
-          </button>
-          <button @click="deleteService(service.id)" class="p-2 text-red-500 bg-red-50 rounded-lg">
-            <Trash2 :size="18" />
-          </button>
-        </div>
-      </Card>
-      
-      <button 
-        @click="openAddModal"
-        class="w-full py-4 border-2 border-dashed border-link text-link font-bold rounded-2xl flex items-center justify-center gap-2 mt-4"
+      </div>
+
+      <button
+        @click="openAdd"
+        class="w-full py-3.5 rounded-xl text-[15px] font-semibold"
+        style="background: var(--tg-btn); color: var(--tg-btn-text);"
       >
-        <Plus :size="20" />
-        Xizmat qo‘shish
+        Xizmat qo'shish
       </button>
     </div>
-    
-    <!-- Service Form Modal -->
-    <BottomSheet 
-      :isOpen="isModalOpen" 
-      :title="editingService ? 'Xizmatni tahrirlash' : 'Yangi xizmat'" 
-      @close="isModalOpen = false"
-    >
-      <div class="space-y-4 pb-8">
-        <div>
-          <label class="block text-sm font-medium mb-1 text-hint">Xizmat nomi</label>
-          <input 
-            v-model="form.name" 
-            type="text" 
-            placeholder="Masalan: Soch olish" 
-            class="w-full bg-secondary-telegram p-4 rounded-xl focus:outline-none"
-          />
+
+    <BottomSheet :isOpen="showForm" :title="editing ? 'Tahrirlash' : 'Yangi xizmat'" @close="showForm = false">
+      <div class="flex flex-col gap-3 pb-4">
+        <input v-model="form.name" placeholder="Nomi (masalan: Soch olish)" />
+        <div class="flex gap-3">
+          <input v-model.number="form.price" type="number" placeholder="Narx (so'm)" />
+          <input v-model.number="form.duration" type="number" placeholder="Daqiqa" />
         </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1 text-hint">Narxi (so‘m)</label>
-            <input 
-              v-model.number="form.price" 
-              type="number" 
-              placeholder="50000" 
-              class="w-full bg-secondary-telegram p-4 rounded-xl focus:outline-none"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1 text-hint">Davomiyligi (daq)</label>
-            <input 
-              v-model.number="form.duration" 
-              type="number" 
-              placeholder="30" 
-              class="w-full bg-secondary-telegram p-4 rounded-xl focus:outline-none"
-            />
-          </div>
-        </div>
-        <button 
-          @click="saveService"
-          class="w-full bg-button text-button py-4 rounded-2xl font-bold text-lg mt-4 shadow-lg shadow-blue-500/20"
+        <button
+          @click="save"
+          class="w-full py-3.5 rounded-xl text-[15px] font-semibold mt-1"
+          style="background: var(--tg-btn); color: var(--tg-btn-text);"
         >
           Saqlash
         </button>
@@ -82,60 +57,27 @@
 import { ref, reactive } from 'vue';
 import { useBarberStore } from '@/stores/barber';
 import TopBar from '@/components/shared/TopBar.vue';
-import Card from '@/components/ui/Card.vue';
 import BottomSheet from '@/components/ui/BottomSheet.vue';
-import { Plus, Edit2, Trash2 } from 'lucide-vue-next';
 import telegram from '@/services/telegram';
 
 const barberStore = useBarberStore();
-const isModalOpen = ref(false);
-const editingService = ref(null);
+const showForm = ref(false);
+const editing = ref(null);
+const form = reactive({ name: '', price: null, duration: null });
 
-const form = reactive({
-  name: '',
-  price: null,
-  duration: null
-});
+const openAdd = () => { editing.value = null; form.name = ''; form.price = null; form.duration = null; showForm.value = true; };
+const editService = (s) => { editing.value = s; form.name = s.name; form.price = s.price; form.duration = s.duration; showForm.value = true; };
 
-const openAddModal = () => {
-  editingService.value = null;
-  form.name = '';
-  form.price = null;
-  form.duration = null;
-  isModalOpen.value = true;
-};
-
-const editService = (service) => {
-  editingService.value = service;
-  form.name = service.name;
-  form.price = service.price;
-  form.duration = service.duration;
-  isModalOpen.value = true;
-};
-
-const saveService = () => {
-  if (!form.name || !form.price || !form.duration) {
-    telegram.showAlert('Iltimos, barcha maydonlarni to‘ldiring');
-    return;
-  }
-  
-  if (editingService.value) {
-    barberStore.updateService(editingService.value.id, { ...form });
-    telegram.HapticFeedback.notificationOccurred('success');
-  } else {
-    barberStore.addService({ ...form });
-    telegram.HapticFeedback.notificationOccurred('success');
-  }
-  
-  isModalOpen.value = false;
+const save = () => {
+  if (!form.name || !form.price || !form.duration) { telegram.showAlert?.('Barcha maydonlarni to\'ldiring'); return; }
+  if (editing.value) barberStore.updateService(editing.value.id, { ...form });
+  else barberStore.addService({ ...form });
+  telegram.HapticFeedback?.notificationOccurred('success');
+  showForm.value = false;
 };
 
 const deleteService = (id) => {
-  telegram.showConfirm('Haqiqatan ham bu xizmatni o‘chirmoqchimisiz?', (confirmed) => {
-    if (confirmed) {
-      barberStore.deleteService(id);
-      telegram.HapticFeedback.impactOccurred('medium');
-    }
-  });
+  barberStore.deleteService(id);
+  telegram.HapticFeedback?.impactOccurred('medium');
 };
 </script>

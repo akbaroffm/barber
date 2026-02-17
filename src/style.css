@@ -1,35 +1,102 @@
 @import "tailwindcss";
 
 :root {
-  --tg-theme-bg-color: #ffffff;
-  --tg-theme-text-color: #000000;
-  --tg-theme-hint-color: #999999;
-  --tg-theme-link-color: #2481cc;
-  --tg-theme-button-color: #2481cc;
-  --tg-theme-button-text-color: #ffffff;
-  --tg-theme-secondary-bg-color: #efeff3;
+  --tg-bg: #ffffff;
+  --tg-text: #1a1a1a;
+  --tg-hint: #8e8e93;
+  --tg-link: #007aff;
+  --tg-btn: #007aff;
+  --tg-btn-text: #ffffff;
+  --tg-secondary: #f2f2f7;
+  --tg-separator: #e5e5ea;
+  --tg-destructive: #ff3b30;
+  --tg-success: #34c759;
+  --tg-warning: #ff9500;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
-  background-color: var(--tg-theme-bg-color);
-  color: var(--tg-theme-text-color);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Telegram Mini App Utilities */
-.bg-telegram { background-color: var(--tg-theme-bg-color); }
-.text-telegram { color: var(--tg-theme-text-color); }
-.bg-secondary-telegram { background-color: var(--tg-theme-secondary-bg-color); }
-.text-hint { color: var(--tg-theme-hint-color); }
-.text-link { color: var(--tg-theme-link-color); }
-.bg-button { background-color: var(--tg-theme-button-color); }
-.text-button { color: var(--tg-theme-button-text-color); }
+/* Hide scrollbars everywhere */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
 
-@theme {
-  --color-primary: var(--tg-theme-button-color);
-  --color-secondary: var(--tg-theme-secondary-bg-color);
+input, textarea, select {
+  font-family: inherit;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  background: var(--tg-secondary);
+  color: var(--tg-text);
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  transition: background 0.15s ease;
+}
+
+input:focus, textarea:focus {
+  background: #e8e8ed;
+}
+
+input::placeholder {
+  color: var(--tg-hint);
+}
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+img {
+  display: block;
+}
+
+/* Utility classes */
+.bg-tg { background: var(--tg-bg); }
+.bg-secondary { background: var(--tg-secondary); }
+.text-tg { color: var(--tg-text); }
+.text-hint { color: var(--tg-hint); }
+.text-link { color: var(--tg-link); }
+.text-destructive { color: var(--tg-destructive); }
+.text-success { color: var(--tg-success); }
+.bg-btn { background: var(--tg-btn); }
+.text-btn { color: var(--tg-btn-text); }
+.border-separator { border-color: var(--tg-separator); }
+
+/* Page transition */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.15s ease;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
 }

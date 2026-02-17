@@ -1,36 +1,38 @@
 <template>
-  <div class="flex flex-col pb-20">
-    <TopBar title="Bildirishnomalar">
+  <div class="pb-24">
+    <TopBar title="Xabarnomalar">
       <template #right>
-        <button 
-          v-if="notificationStore.notifications.length > 0"
-          @click="notificationStore.clearAll()"
-          class="text-xs text-red-500 font-medium"
-        >
+        <button v-if="ns.notifications.length" @click="ns.clearAll()" class="text-[13px] font-medium" style="color: var(--tg-destructive);">
           Tozalash
         </button>
       </template>
     </TopBar>
-    
-    <div class="px-4 mt-4">
-      <div v-if="notificationStore.notifications.length === 0" class="py-20 text-center">
-        <Bell :size="48" class="text-hint mx-auto mb-4 opacity-20" />
-        <p class="text-hint">Hozircha bildirishnomalar yo‘q</p>
-      </div>
-      
-      <div v-else class="space-y-3">
-        <div 
-          v-for="notif in notificationStore.notifications" 
-          :key="notif.id"
-          class="p-4 rounded-2xl bg-secondary-telegram border-l-4"
-          :class="[notif.read ? 'border-transparent' : typeColors[notif.type] || 'border-gray-300']"
-          @click="notificationStore.markAsRead(notif.id)"
+
+    <div v-if="!ns.notifications.length" class="flex flex-col items-center pt-24 text-center">
+      <Bell :size="40" style="color: var(--tg-hint); opacity: 0.3;" />
+      <p class="text-[15px] mt-4" style="color: var(--tg-hint);">Bildirishnomalar yo'q</p>
+    </div>
+
+    <div v-else class="px-4 pt-2">
+      <div class="rounded-2xl overflow-hidden" style="background: var(--tg-secondary);">
+        <div
+          v-for="(n, i) in ns.notifications"
+          :key="n.id"
+          class="px-4 py-3.5 flex gap-3"
+          :style="i < ns.notifications.length - 1 ? 'border-bottom: 0.5px solid var(--tg-separator)' : ''"
+          @click="ns.markAsRead(n.id)"
         >
-          <div class="flex justify-between items-start mb-1">
-            <h4 class="font-bold text-sm">{{ notif.title }}</h4>
-            <span class="text-[10px] text-hint">{{ formatTime(notif.time) }}</span>
+          <div
+            class="w-2 h-2 rounded-full shrink-0 mt-1.5"
+            :style="{ background: n.read ? 'transparent' : (n.type === 'success' ? '#34c759' : n.type === 'error' ? '#ff3b30' : 'var(--tg-link)') }"
+          />
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start mb-0.5">
+              <span class="text-[14px] font-semibold">{{ n.title }}</span>
+              <span class="text-[11px] shrink-0 ml-2" style="color: var(--tg-hint);">{{ formatTime(n.time) }}</span>
+            </div>
+            <p class="text-[13px]" style="color: var(--tg-hint);">{{ n.message }}</p>
           </div>
-          <p class="text-sm text-gray-600">{{ notif.message }}</p>
         </div>
       </div>
     </div>
@@ -42,16 +44,6 @@ import { useNotificationStore } from '@/stores/notification';
 import TopBar from '@/components/shared/TopBar.vue';
 import { Bell } from 'lucide-vue-next';
 
-const notificationStore = useNotificationStore();
-
-const typeColors = {
-  success: 'border-green-500',
-  info: 'border-blue-500',
-  error: 'border-red-500'
-};
-
-const formatTime = (timeStr) => {
-  const d = new Date(timeStr);
-  return d.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
-};
+const ns = useNotificationStore();
+const formatTime = (t) => new Date(t).toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
 </script>

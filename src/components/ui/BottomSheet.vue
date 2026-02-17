@@ -1,47 +1,25 @@
 <template>
-  <transition name="slide-up">
+  <transition name="sheet">
     <div v-if="isOpen" class="fixed inset-0 z-[100] flex flex-col justify-end">
-      <!-- Backdrop -->
-      <div class="absolute inset-0 bg-black/40" @click="close"></div>
-      
-      <!-- Content -->
-      <div class="relative bg-telegram rounded-t-[32px] p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
-        <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6"></div>
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-xl font-bold">{{ title }}</h3>
-          <button @click="close" class="p-2 bg-gray-100 rounded-full">
-            <X :size="20" />
-          </button>
+      <div class="absolute inset-0 bg-black/30" @click="$emit('close')" />
+      <div class="relative rounded-t-2xl pb-8" style="background: var(--tg-bg);">
+        <div class="w-9 h-1 rounded-full mx-auto mt-3 mb-4" style="background: var(--tg-separator);" />
+        <div class="flex justify-between items-center px-5 mb-5">
+          <h3 class="text-[17px] font-semibold">{{ title }}</h3>
+          <button @click="$emit('close')" class="text-[15px] font-medium" style="color: var(--tg-link);">Yopish</button>
         </div>
-        <slot></slot>
+        <div class="px-5"><slot /></div>
       </div>
     </div>
   </transition>
 </template>
 
 <script setup>
-import { X } from 'lucide-vue-next';
-
-defineProps({
-  isOpen: Boolean,
-  title: String
-});
-
-const emit = defineEmits(['close']);
-
-const close = () => {
-  emit('close');
-};
+defineProps({ isOpen: Boolean, title: String });
+defineEmits(['close']);
 </script>
 
 <style scoped>
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  opacity: 0;
-}
+.sheet-enter-active, .sheet-leave-active { transition: opacity 0.2s ease; }
+.sheet-enter-from, .sheet-leave-to { opacity: 0; }
 </style>
