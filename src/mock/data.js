@@ -50,8 +50,8 @@ export const mockBarbers = [
         workHours: '10:00 – 21:00',
         isOpen: true,
         about: "Sirojiddin Style — zamonaviy erkaklar soch turmagi. Kreativ va klassik soch olish xizmatlari, styling va boshqalar.",
-        image: 'https://images.unsplash.com/photo-1592647425447-182564215944?w=800&h=500&fit=crop',
-        cover: 'https://images.unsplash.com/photo-1592647425447-182564215944?w=800&h=500&fit=crop',
+        image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&h=500&fit=crop',
+        cover: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&h=500&fit=crop',
         portfolio: [
             'https://images.unsplash.com/photo-1536520002442-39764a41e987?w=400',
             'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400'
