@@ -97,7 +97,7 @@
       <div class="fixed bottom-16 left-4 right-4 z-40">
         <button
           @click="openAdd"
-          class="w-full py-4 rounded-[20px] text-[15px] font-bold shadow-lg flex items-center justify-center gap-2"
+          class="w-[400px] mx-auto py-3 rounded-[20px] text-[15px] font-bold shadow-lg flex items-center justify-center gap-2"
           style="background: var(--accent); color: #000"
         >
           <Plus :size="18" /> Yangi xizmat qo'shish
@@ -116,7 +116,7 @@
           @click="showForm = false"
         />
         <div
-          class="relative rounded-t-[32px] overflow-hidden"
+          class="relative rounded-t-[32px] overflow-hidden max-w-[400px] mx-auto"
           style="
             background: var(--bg-primary);
             padding-bottom: env(safe-area-inset-bottom);

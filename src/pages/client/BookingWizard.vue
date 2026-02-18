@@ -17,7 +17,7 @@
         <button
           @click="goBack"
           class="w-9 h-9 rounded-full flex items-center justify-center pointer-events-auto backdrop-blur-md"
-          style="background: rgba(0,0,0,0.4)"
+          style="background: rgba(0, 0, 0, 0.4)"
         >
           <ChevronLeft :size="22" style="color: #fff" />
         </button>
@@ -235,7 +235,7 @@
 
     <!-- Sticky Bottom Bar -->
     <div
-      class="fixed bottom-14 left-0 right-0 z-40 px-4 pb-3 pt-3"
+      class="fixed bottom-14 left-0 right-0 z-40 pb-3 pt-3 w-[400px] mx-auto rounded-2xl"
       style="
         background: linear-gradient(to top, var(--bg-primary) 80%, transparent);
       "

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen" style="background: var(--bg-primary); color: var(--text-primary);">
+  <div class="min-h-screen w-[400px] mx-auto" style="background: var(--bg-primary); color: var(--text-primary);">
     <router-view v-slot="{ Component }">
       <transition name="page" mode="out-in">
         <component :is="Component" />
