@@ -279,7 +279,7 @@
     <div class="fixed bottom-16 left-0 right-0 px-4 z-10">
       <button
         @click="showExpenseForm = true"
-        class="w-[400px] mx-auto py-3 rounded-2xl text-[15px] font-bold flex items-center justify-center gap-2 shadow-2xl active:scale-95 transition-all"
+        class="w-[300px] mx-auto py-3 rounded-2xl text-[15px] font-bold flex items-center justify-center gap-2 shadow-2xl active:scale-95 transition-all"
         style="
           background: var(--accent);
           color: #000;

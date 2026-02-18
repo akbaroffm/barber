@@ -256,7 +256,7 @@
       <button
         @click="confirmBooking"
         :disabled="!canConfirm"
-        class="w-full py-3.5 rounded-2xl text-[16px] font-bold flex items-center justify-center gap-2"
+        class="w-[300px] mx-auto py-3.5 rounded-2xl text-[16px] font-bold flex items-center justify-center gap-2"
         :style="{
           background: canConfirm ? 'var(--accent)' : 'var(--bg-elevated)',
           color: canConfirm ? '#000' : 'var(--text-muted)',
