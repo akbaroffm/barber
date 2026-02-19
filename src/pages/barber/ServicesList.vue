@@ -112,7 +112,7 @@
         class="fixed inset-0 z-[100] flex flex-col justify-end"
       >
         <div
-          class="absolute inset-0 bg-black/80 backdrop-blur-md"
+          class="absolute inset-0 bg-black/15"
           @click="showForm = false"
         />
         <div
@@ -341,12 +341,20 @@ const deleteService = (id) => {
 <style scoped>
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.22s ease;
 }
 .slide-up-enter-from,
 .slide-up-leave-to {
-  transform: translateY(100%);
   opacity: 0;
+}
+
+.slide-up-enter-active .relative,
+.slide-up-leave-active .relative {
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.slide-up-enter-from .relative,
+.slide-up-leave-to .relative {
+  transform: translateY(100%);
 }
 
 input::placeholder {

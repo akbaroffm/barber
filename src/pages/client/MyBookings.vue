@@ -155,7 +155,7 @@
         class="fixed inset-0 z-[100] flex flex-col justify-end"
       >
         <div
-          class="absolute inset-0 bg-black/50"
+          class="absolute inset-0 bg-black/15"
           @click="detailBooking = null"
         />
         <div
@@ -445,10 +445,19 @@ const formatDate = (d) => {
 <style scoped>
 .sheet-enter-active,
 .sheet-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.22s ease;
 }
 .sheet-enter-from,
 .sheet-leave-to {
   opacity: 0;
+}
+
+.sheet-enter-active .relative,
+.sheet-leave-active .relative {
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.sheet-enter-from .relative,
+.sheet-leave-to .relative {
+  transform: translateY(100%);
 }
 </style>

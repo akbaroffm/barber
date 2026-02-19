@@ -254,7 +254,7 @@
         >
       </div>
       <button
-        @click="confirmBooking"
+        @click="openPaymentModal"
         :disabled="!canConfirm"
         class="w-[300px] mx-auto py-3.5 rounded-2xl text-[16px] font-bold flex items-center justify-center gap-2"
         :style="{
@@ -267,37 +267,90 @@
       </button>
     </div>
 
-    <!-- Success Modal -->
+    <!-- Payment Modal -->
     <transition name="sheet">
       <div
-        v-if="showSuccess"
-        class="fixed inset-0 z-[100] flex items-center justify-center px-6"
+        v-if="showPayment"
+        class="fixed inset-0 z-[100] flex items-end justify-center"
       >
-        <div class="absolute inset-0 bg-black/60" @click="goToBookings" />
+        <div class="absolute inset-0 bg-black/15" @click="showPayment = false" />
         <div
-          class="relative p-6 rounded-3xl text-center max-w-sm w-full"
+          class="payment-sheet relative w-full max-w-[400px] mx-auto rounded-t-3xl px-5 pt-5 pb-8"
           style="background: var(--bg-card)"
         >
-          <div
-            class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-            style="background: var(--accent-dim)"
-          >
-            <Check :size="32" style="color: var(--accent)" />
-          </div>
-          <h2 class="text-xl font-bold mb-2">Muvaffaqiyatli!</h2>
-          <p class="text-[14px] mb-6" style="color: var(--text-secondary)">
-            Navbat so'rovi yuborildi. Sartarosh tasdiqlashini kuting.
+          <!-- Handle -->
+          <div class="w-10 h-1 rounded-full mx-auto mb-5" style="background: var(--bg-elevated)" />
+
+          <h2 class="text-[17px] font-bold mb-1">To'lovni tanlang</h2>
+          <p class="text-[13px] mb-5" style="color: var(--text-secondary)">
+            Navbatga yozilish uchun umumiy summaning
+            <span class="font-bold" style="color: var(--accent)">30%</span>
+            ni to'lash kerak
           </p>
-          <button
-            @click="goToBookings"
-            class="w-full py-3.5 rounded-2xl text-[16px] font-bold"
-            style="background: var(--accent); color: #000"
+
+          <!-- Amount breakdown -->
+          <div
+            class="flex items-center justify-between p-3.5 rounded-2xl mb-5"
+            style="background: var(--bg-elevated)"
           >
-            Navbatlarimga o'tish
+            <div>
+              <span class="text-[12px] block" style="color: var(--text-secondary)">Umumiy summa</span>
+              <span class="text-[15px] font-semibold">{{ totalPrice.toLocaleString() }} so'm</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[12px] block" style="color: var(--text-secondary)">Avans (30%)</span>
+              <span class="text-[17px] font-bold" style="color: var(--accent)">{{ depositAmount.toLocaleString() }} so'm</span>
+            </div>
+          </div>
+
+          <!-- Warning Message -->
+          <div
+            class="p-3 rounded-xl mb-5 flex gap-3 items-start"
+            style="background: var(--red-dim); border: 1px solid var(--red)"
+          >
+            <AlertCircle :size="18" class="shrink-0 pt-0.5" style="color: var(--red)" />
+            <p class="text-[12px] leading-tight" style="color: var(--red)">
+              <strong>Diqqat:</strong> Navbat bekor qilinganda to'langan avans summasi qaytarilmaydi.
+            </p>
+          </div>
+
+          <!-- Click -->
+          <button
+            @click="payWith('click')"
+            class="w-full flex items-center gap-4 p-4 rounded-2xl mb-3"
+            style="background: var(--bg-elevated); border: 1.5px solid #00AAFF33"
+          >
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-[22px]"
+              style="background: #00AAFF18"
+            >💳</div>
+            <div class="flex-1 text-left">
+              <span class="text-[15px] font-bold block">Click</span>
+              <span class="text-[12px]" style="color: var(--text-secondary)">Click orqali to'lash</span>
+            </div>
+            <ChevronRight :size="18" style="color: var(--text-muted)" />
+          </button>
+
+          <!-- Payme -->
+          <button
+            @click="payWith('payme')"
+            class="w-full flex items-center gap-4 p-4 rounded-2xl mb-2"
+            style="background: var(--bg-elevated); border: 1.5px solid #00C88333"
+          >
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-[22px]"
+              style="background: #00C88318"
+            >🟢</div>
+            <div class="flex-1 text-left">
+              <span class="text-[15px] font-bold block">Payme</span>
+              <span class="text-[12px]" style="color: var(--text-secondary)">Payme orqali to'lash</span>
+            </div>
+            <ChevronRight :size="18" style="color: var(--text-muted)" />
           </button>
         </div>
       </div>
     </transition>
+
   </div>
 </template>
 
@@ -314,7 +367,7 @@ import {
   Clock,
   Phone,
   Navigation,
-  Check,
+  AlertCircle,
 } from "lucide-vue-next";
 import telegram from "@/services/telegram";
 
@@ -331,7 +384,7 @@ const selectedDate = ref(null);
 const selectedTime = ref(null);
 const guestCount = ref(1);
 const selectedServices = ref([]);
-const showSuccess = ref(false);
+const showPayment = ref(false);
 
 const months = [
   "Yan",
@@ -397,6 +450,8 @@ const totalPrice = computed(() => {
   return sum * guestCount.value;
 });
 
+const depositAmount = computed(() => Math.round(totalPrice.value * 0.3));
+
 const canConfirm = computed(
   () =>
     selectedDate.value &&
@@ -404,8 +459,13 @@ const canConfirm = computed(
     selectedServices.value.length > 0,
 );
 
-const confirmBooking = () => {
+const openPaymentModal = () => {
   if (!canConfirm.value) return;
+  telegram.HapticFeedback?.impactOccurred("medium");
+  showPayment.value = true;
+};
+
+const confirmBooking = () => {
   const services = barber.value.services.filter((s) =>
     selectedServices.value.includes(s.id),
   );
@@ -423,14 +483,43 @@ const confirmBooking = () => {
     date: selectedDate.value.iso,
     time: selectedTime.value,
     price: totalPrice.value,
+    depositPaid: depositAmount.value,
     guestCount: guestCount.value,
     clientName: telegram.user.first_name || "Mijoz",
   });
   telegram.HapticFeedback?.notificationOccurred("success");
-  showSuccess.value = true;
+  showPayment.value = false;
+  router.push({ name: "booking-success" });
 };
 
-const goToBookings = () => router.push("/c/bookings");
+const payWith = (provider) => {
+  telegram.HapticFeedback?.impactOccurred("light");
+
+  // To'lov URL-larini yasash (demo merchant ID bilan)
+  const amount = depositAmount.value; // so'mda
+  const amountTiyin = amount * 100;   // tiyin/`cent` birligida
+  const orderId = `booking-${Date.now()}`;
+  const description = encodeURIComponent(
+    `Sartarosh navbati uchun avans to'lovi (30%)`
+  );
+
+  let payUrl = "";
+  if (provider === "click") {
+    // Click Deep Link format
+    // https://my.click.uz/services/pay?service_id=<ID>&merchant_id=<ID>&amount=<AMOUNT>&transaction_param=<ORDER_ID>
+    payUrl = `https://my.click.uz/services/pay?service_id=12345&merchant_id=12345&amount=${amount}&transaction_param=${orderId}&return_url=${encodeURIComponent(window.location.href)}`;
+  } else if (provider === "payme") {
+    // Payme checkout format
+    // https://checkout.paycom.uz/<BASE64(m=<MERCHANT_ID>;ac.order_id=<ORDER_ID>;a=<AMOUNT>)>
+    const params = btoa(`m=5e730e8e0b852a417aa49ceb;ac.order_id=${orderId};a=${amountTiyin};l=uz`);
+    payUrl = `https://checkout.paycom.uz/${params}`;
+  }
+
+  // Bookingni qo'shib, to'lov sahifasiga yo'naltirish
+  confirmBooking();
+  window.open(payUrl, "_blank");
+};
+
 const goBack = () => router.back();
 
 const openLocation = () => {
@@ -453,12 +542,23 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Overlay fade */
 .sheet-enter-active,
 .sheet-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.22s ease;
 }
 .sheet-enter-from,
 .sheet-leave-to {
   opacity: 0;
+}
+
+/* Bottom sheet inner slide-up */
+.sheet-enter-active .payment-sheet,
+.sheet-leave-active .payment-sheet {
+  transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.sheet-enter-from .payment-sheet,
+.sheet-leave-to .payment-sheet {
+  transform: translateY(100%);
 }
 </style>

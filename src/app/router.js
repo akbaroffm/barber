@@ -26,6 +26,7 @@ const routes = [
             { path: 'favorites', component: () => import('@/pages/client/Favorites.vue'), name: 'client-favorites' },
             { path: 'barber/:id', component: () => import('@/pages/client/BarberProfile.vue'), name: 'barber-profile' },
             { path: 'book/:id', component: () => import('@/pages/client/BookingWizard.vue'), name: 'booking-wizard' },
+            { path: 'booking-success', component: () => import('@/pages/client/BookingSuccess.vue'), name: 'booking-success' },
             { path: 'bookings', component: () => import('@/pages/client/MyBookings.vue'), name: 'client-bookings' },
             { path: 'notifications', component: () => import('@/pages/client/Notifications.vue'), name: 'client-notifications' },
             { path: 'settings', component: () => import('@/pages/client/Settings.vue'), name: 'client-settings' }
